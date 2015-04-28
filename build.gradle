@@ -1,0 +1,15 @@
+apply plugin: 'jetty'
+apply plugin: 'ear'
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+    jcenter()
+    maven { url 'http://repository.jboss.org/nexus/content/groups/public' }
+}
+
+dependencies {
+    compile group: 'javax.ejb', name: 'javax.ejb-api', version: '3.2'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.2'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.2'
+}
