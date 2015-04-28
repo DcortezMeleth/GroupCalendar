@@ -4,13 +4,7 @@
              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/application_6.xsd"
              version="6">
 
-    <module id="GroupCalendar-Web">
-        <web>
-            <web-uri>web.war</web-uri>
-            <context-root>GroupCalendarWeb</context-root>
-        </web>
-    </module>
-    <module id="GroupCalendar-EJB">
-        <ejb>ejb.jar</ejb>
+    <module id="ejbs">
+        <ejb>lib/ejbs-1.0.jar</ejb>
     </module>
 </application>
