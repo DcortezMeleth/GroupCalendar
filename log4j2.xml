@@ -14,13 +14,18 @@
             </Policies>
             <DefaultRolloverStrategy max="4"/>
         </RollingFile>
+        <Console name="STDOUT" target="SYSTEM_OUT">
+            <PatternLayout pattern="%m%n"/>
+        </Console>
     </Appenders>
     <Loggers>
         <Logger name="root" level="debug" additivity="false">
             <appender-ref ref="RollingFile" level="debug"/>
+            <appender-ref ref="STDOUT" level="debug"/>
         </Logger>
         <Root level="debug" additivity="false">
             <AppenderRef ref="RollingFile"/>
+            <AppenderRef ref="STDOUT"/>
         </Root>
     </Loggers>
 </Configuration>
