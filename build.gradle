@@ -39,6 +39,7 @@ project(":ear") {
     apply plugin: "ear"
 
     dependencies {
-        earlib project(":ejbs")
+        deploy project(":ejbs")
+        earlib project(path:":ejbs", configuration:"compile")
     }
 }

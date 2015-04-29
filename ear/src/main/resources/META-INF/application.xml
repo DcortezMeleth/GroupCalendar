@@ -4,7 +4,9 @@
              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/application_6.xsd"
              version="6">
 
+    <display-name>ear</display-name>
     <module id="ejbs">
-        <ejb>lib/ejbs-1.0.jar</ejb>
+        <ejb>ejbs-1.0.jar</ejb>
     </module>
+    <library-directory>lib</library-directory>
 </application>

@@ -15,20 +15,15 @@ import java.io.IOException;
  */
 public final class InitLog4j {
 
-    private final static String LOG4J_CONFIG_PATH = "";
-
-    private final static String LOG4J_CONFIG_FILE_NAME = "log4j2.xml";
-
     /**
      * Konstruktor prywatny. Jest to klasa utilowa. Nie tworzymy jej instancji.
      */
     private InitLog4j() {
     }
 
-    public static void initLog4j() {
+    public static void initLog4j(String path, String fileName) {
         try {
-            ConfigurationSource source =
-                    new ConfigurationSource(new FileInputStream(LOG4J_CONFIG_PATH + LOG4J_CONFIG_FILE_NAME));
+            ConfigurationSource source = new ConfigurationSource(new FileInputStream(path + fileName));
             XmlConfiguration xmlConfiguration = new XmlConfiguration(source);
             Logger logger = (Logger) LogManager.getLogger();
             logger.getContext().start(xmlConfiguration);

@@ -4,4 +4,20 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 		  http://java.sun.com/xml/ns/javaee/ejb-jar_3_1.xsd"
          version="3.1">
+    <display-name>ejbs</display-name>
+    <enterprise-beans>
+        <session>
+            <ejb-name>StartupBean</ejb-name>
+            <env-entry>
+                <env-entry-name>log4j/configFile</env-entry-name>
+                <env-entry-type>java.lang.String</env-entry-type>
+                <env-entry-value>log4j.xml</env-entry-value>
+            </env-entry>
+            <env-entry>
+                <env-entry-name>log4j/configPath</env-entry-name>
+                <env-entry-type>java.lang.String</env-entry-type>
+                <env-entry-value>conf/</env-entry-value>
+            </env-entry>
+        </session>
+    </enterprise-beans>
 </ejb-jar>

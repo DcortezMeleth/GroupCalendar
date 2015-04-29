@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import pl.edu.agh.groupcalendar.utils.InitLog4j;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 
@@ -18,13 +19,19 @@ public class StartupBean {
 
     private static final Logger LOGGER = LogManager.getLogger(StartupBean.class);
 
+    @Resource(name = "log4j/configPath")
+    private String log4jConfigPath;
+
+    @Resource(name = "log4j/configFile")
+    private String log4jConfigFileName;
+
     @PostConstruct
     public void init() {
         String methodName = "[init] ";
         LOGGER.info(methodName + "START");
 
         //inicjalizujemy logi
-        InitLog4j.initLog4j();
+        InitLog4j.initLog4j(log4jConfigPath, log4jConfigFileName);
 
         //TODO:test polaczenia z baza danych
 
