@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="DEBUG">
     <Properties>
-        <Property name="log-path">C:/logs/</Property>
+        <Property name="log-path">g:\jboss-as-7.1.1.Final\jboss-as-7.1.1.Final\standalone\log\</Property>
     </Properties>
     <Appenders>
-        <RollingFile name="RollingFile" fileName="${log-path}/myexample.log"
+        <RollingFile name="RollingFile" fileName="${log-path}/groupcalendar.log"
             filePattern="${log-path}/groupcalendar-%d{yyyy-MM-dd}-%i.log" >
             <PatternLayout>
                 <pattern>%d{dd/MMM/yyyy HH:mm:ss,SSS}- %c{1}: %m%n</pattern>

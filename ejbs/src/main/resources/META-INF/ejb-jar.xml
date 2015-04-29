@@ -11,12 +11,12 @@
             <env-entry>
                 <env-entry-name>log4j/configFile</env-entry-name>
                 <env-entry-type>java.lang.String</env-entry-type>
-                <env-entry-value>log4j.xml</env-entry-value>
+                <env-entry-value>log4j2.xml</env-entry-value>
             </env-entry>
             <env-entry>
                 <env-entry-name>log4j/configPath</env-entry-name>
                 <env-entry-type>java.lang.String</env-entry-type>
-                <env-entry-value>conf/</env-entry-value>
+                <env-entry-value>g:\jboss-as-7.1.1.Final\jboss-as-7.1.1.Final\standalone\configuration\</env-entry-value>
             </env-entry>
         </session>
     </enterprise-beans>
