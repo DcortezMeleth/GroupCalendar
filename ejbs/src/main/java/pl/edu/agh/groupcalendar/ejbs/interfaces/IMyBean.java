@@ -1,6 +1,7 @@
 package pl.edu.agh.groupcalendar.ejbs.interfaces;
 
 import javax.ejb.Local;
+import java.util.Date;
 
 /**
  * @author Bartosz
@@ -8,5 +9,7 @@ import javax.ejb.Local;
  */
 @Local
 public interface IMyBean {
+
+    Date getCurrentDate();
 
 }

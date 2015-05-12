@@ -30,6 +30,19 @@ project(":ejbs") {
     }
 }
 
+project(":rest") {
+    apply plugin: "java"
+
+    dependencies {
+
+        compile project(':ejbs')
+        compile group: 'javax.ejb', name: 'javax.ejb-api', version: '3.2'
+        compile group: 'javax.ws.rs', name: 'jsr311-api', version: '0.11'
+        compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.2'
+        compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.2'
+    }
+}
+
 project(":war") {
     apply plugin: "war"
 }
@@ -39,7 +52,13 @@ project(":ear") {
     apply plugin: "ear"
 
     dependencies {
+        //def nonTransitive = {transitive = false}
         deploy project(":ejbs")
+        deploy project(":rest")
         earlib project(path:":ejbs", configuration:"compile")
+        earlib project(path:":rest", configuration:"compile")//, nonTransitive
+        //add('earlib', project(':rest')) {
+        //    exlude project(':ejbs')
+        //}
     }
 }
