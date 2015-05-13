@@ -8,5 +8,8 @@
     <module id="ejbs">
         <ejb>ejbs-1.0.jar</ejb>
     </module>
+    <module id="rest">
+        <ejb>rest-1.0.jar</ejb>
+    </module>
     <library-directory>lib</library-directory>
 </application>
