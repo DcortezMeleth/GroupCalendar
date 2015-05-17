@@ -57,6 +57,8 @@ project(":ear") {
         deploy project(":rest")
         deploy project(path:":war", configuration:'archives')
         earlib project(path:":ejbs", configuration:"compile")
-        earlib project(path:":rest", configuration:"compile")
+        earlib(project(path:":rest", configuration:"compile")) {
+            exclude module: 'ejbs'
+        }
     }
 }
