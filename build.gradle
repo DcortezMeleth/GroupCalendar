@@ -55,7 +55,7 @@ project(":ear") {
     dependencies {
         deploy project(":ejbs")
         deploy project(":rest")
-        deploy project(":war")
+        deploy project(path:":war", configuration:'archives')
         earlib project(path:":ejbs", configuration:"compile")
         earlib project(path:":rest", configuration:"compile")
     }
