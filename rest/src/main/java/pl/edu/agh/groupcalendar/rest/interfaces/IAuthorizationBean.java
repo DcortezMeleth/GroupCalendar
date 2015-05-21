@@ -11,11 +11,11 @@ import javax.ws.rs.Produces;
  *         Created on 2015-05-12.
  */
 
-@Local
-@Path("/")
+//@Local
+//@Path("/")
 public interface IAuthorizationBean {
 
-    @GET
+    /*@GET
     @Path("date")
     @Produces("text/plain")
     String getDate();
@@ -23,5 +23,5 @@ public interface IAuthorizationBean {
     @GET
     @Path("param/{param}")
     @Produces("text/plain")
-    String getParam(@PathParam("param") String param);
+    String getParam(@PathParam("param") String param);*/
 }
