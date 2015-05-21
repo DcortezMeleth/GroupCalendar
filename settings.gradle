@@ -1,1 +1,1 @@
-include 'ejbs', 'rest', 'ear', 'war'
+include 'ejbs', 'ear', 'war'
