@@ -1,0 +1,10 @@
+<jboss-deployment-structure>
+   <sub-deployment name="war-1.0.war">
+      <dependencies>
+         <module name="org.jboss.resteasy.resteasy-jackson-provider"/>
+         <module name="org.codehaus.jackson.jackson-jaxrs"/>
+         <module name="org.codehaus.jackson.jackson-mapper-asl"/>
+         <module name="org.codehaus.jackson.jackson-core-asl"/>
+      </dependencies>
+   </sub-deployment>
+</jboss-deployment-structure>

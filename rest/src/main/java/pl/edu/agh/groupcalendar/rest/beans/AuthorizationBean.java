@@ -15,7 +15,6 @@ import javax.ws.rs.*;
  * @author Bartosz
  *         Created on 2015-05-13.
  */
-@LocalBean
 @Path("/")
 @Stateless
 public class AuthorizationBean {//implements IAuthorizationBean {
