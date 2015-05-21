@@ -8,6 +8,9 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  * @author Bartosz
@@ -25,6 +28,9 @@ public class StartupBean {
     @Resource(name = "log4j/configFile")
     private String log4jConfigFileName;
 
+    @Resource(mappedName = "java:/group_calendar")
+    private DataSource ds;
+
     @PostConstruct
     public void init() {
         String methodName = "[init] ";
@@ -34,7 +40,12 @@ public class StartupBean {
         InitLog4j.initLog4j(log4jConfigPath, log4jConfigFileName);
         LOGGER.info(methodName + "Log4j initialized!");
 
-        //TODO:test polaczenia z baza danych
+        try (Connection con = ds.getConnection()){
+            LOGGER.info("DB connected");
+            LOGGER.info("Schema: " + con.getSchema());
+        } catch (SQLException e) {
+            LOGGER.error("Cannot get connection to DB!", e);
+        }
 
         LOGGER.info(methodName + "STOP");
     }
