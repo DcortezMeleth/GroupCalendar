@@ -4,6 +4,7 @@ import javax.ejb.Local;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 
 /**
  * @author Bartosz
@@ -11,14 +12,16 @@ import javax.ws.rs.PathParam;
  */
 
 @Local
-@Path("/auth")
+@Path("/")
 public interface IAuthorizationBean {
 
     @GET
-    @Path("/date")
+    @Path("date")
+    @Produces("text/plain")
     String getDate();
 
     @GET
-    @Path("/param/{param}")
+    @Path("param/{param}")
+    @Produces("text/plain")
     String getParam(@PathParam("param") String param);
 }

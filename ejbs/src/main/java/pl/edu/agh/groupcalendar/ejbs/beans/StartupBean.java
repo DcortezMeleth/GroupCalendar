@@ -32,6 +32,7 @@ public class StartupBean {
 
         //inicjalizujemy logi
         InitLog4j.initLog4j(log4jConfigPath, log4jConfigFileName);
+        LOGGER.info(methodName + "Log4j initialized!");
 
         //TODO:test polaczenia z baza danych
 

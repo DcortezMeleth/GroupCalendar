@@ -1,22 +1,12 @@
-<web-app>
-    <display-name>GroupCalendar</display-name>
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
     <context-param>
-        <param-name>resteasy.jndi.resources</param-name>
-        <param-value>AuthorizationBean/local</param-value>
+        <param-name>resteasy.scan</param-name>
+        <param-value>true</param-value>
     </context-param>
-
-    <listener>
-        <listener-class>org.resteasy.plugins.server.servlet.ResteasyBootstrap</listener-class>
-    </listener>
-
-    <servlet>
-        <servlet-name>Resteasy</servlet-name>
-        <servlet-class>org.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>Resteasy</servlet-name>
-        <url-pattern>/*</url-pattern>
-    </servlet-mapping>
-
+    <context-param>
+        <param-name>resteasy.servlet.mapping.prefix</param-name>
+        <param-value>/</param-value>
+    </context-param>
 </web-app>
