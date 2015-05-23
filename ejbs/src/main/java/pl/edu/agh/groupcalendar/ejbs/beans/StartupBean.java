@@ -28,8 +28,11 @@ public class StartupBean {
     @Resource(name = "log4j/configFile")
     private String log4jConfigFileName;
 
-    @Resource(mappedName = "java:/group_calendar")
+    @Resource(mappedName = "java:jboss/datasources/postgresDS")
     private DataSource ds;
+
+    @Resource(mappedName = "java:jboss/datasources/group_calendar")
+    private DataSource ds2;
 
     @PostConstruct
     public void init() {
@@ -40,9 +43,23 @@ public class StartupBean {
         InitLog4j.initLog4j(log4jConfigPath, log4jConfigFileName);
         LOGGER.info(methodName + "Log4j initialized!");
 
-        try (Connection con = ds.getConnection()){
+        /*try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            LOGGER.error("MySQL driver not found!", e);
+        }*/
+
+        try (Connection con = ds.getConnection(); Connection con2 = ds2.getConnection()){
             LOGGER.info("DB connected");
-            LOGGER.info("Schema: " + con.getSchema());
+
+            LOGGER.info("Driver: " + con.getMetaData().getDriverName() + " " + con.getMetaData().getDriverVersion());
+            LOGGER.info("Driver 2: " + con2.getMetaData().getDriverName() + " " + con2.getMetaData().getDriverVersion());
+
+            //Connection conUnwrapped = con.unwrap(Connection.class);
+            //Connection conUnwrapped2 = con2.unwrap(Connection.class);
+
+            //LOGGER.info("Con1: " + conUnwrapped.getSchema());
+            //LOGGER.info("Con2: " + conUnwrapped2.getSchema());
         } catch (SQLException e) {
             LOGGER.error("Cannot get connection to DB!", e);
         }
