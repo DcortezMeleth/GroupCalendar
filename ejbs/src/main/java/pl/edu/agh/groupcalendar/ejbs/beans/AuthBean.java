@@ -2,7 +2,7 @@ package pl.edu.agh.groupcalendar.ejbs.beans;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import pl.edu.agh.groupcalendar.ejbs.interfaces.IMyBean;
+import pl.edu.agh.groupcalendar.ejbs.interfaces.IAuthBean;
 import pl.edu.agh.groupcalendar.dto.User;
 
 import javax.annotation.PostConstruct;
@@ -18,9 +18,9 @@ import java.util.List;
  *         Created on 2015-04-27.
  */
 @Stateless(name = "MyBean")
-public class MyBean implements IMyBean {
+public class AuthBean implements IAuthBean {
 
-    private static final Logger LOGGER = LogManager.getLogger(MyBean.class);
+    private static final Logger LOGGER = LogManager.getLogger(AuthBean.class);
 
     @PersistenceContext(unitName = "group_calendar")
     private EntityManager entityManager;
@@ -36,13 +36,7 @@ public class MyBean implements IMyBean {
     }
 
     @Override
-    public void insertMockUser() {
-        User user = new User();
-        user.setUs_name("Bartosz");
-        user.setUs_surname("Sadel");
-        user.setUs_username("Dcortez");
-        user.setUs_email("bsadel69@gmail.com");
-        user.setUs_password("dupa");
+    public void insertUser(final User user) {
         entityManager.persist(user);
     }
 

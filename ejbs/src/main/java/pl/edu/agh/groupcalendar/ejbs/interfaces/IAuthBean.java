@@ -3,7 +3,6 @@ package pl.edu.agh.groupcalendar.ejbs.interfaces;
 import pl.edu.agh.groupcalendar.dto.User;
 
 import javax.ejb.Local;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -11,11 +10,9 @@ import java.util.List;
  *         Created on 2015-04-27.
  */
 @Local
-public interface IMyBean {
+public interface IAuthBean {
 
-    Date getCurrentDate();
-
-    void insertMockUser();
+    void insertUser(final User user);
 
     List<User> getUsers();
 }

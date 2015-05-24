@@ -23,10 +23,20 @@ public class Session implements Serializable {
     @JoinColumn(name = "ss_us_id")
     private User user;
 
+    private String ss_key;
+
     private Date ss_last_action;
 
     public Session() {
         super();
+    }
+
+    public String getSs_key() {
+        return ss_key;
+    }
+
+    public void setSs_key(String ss_key) {
+        this.ss_key = ss_key;
     }
 
     public int getSs_id() {
