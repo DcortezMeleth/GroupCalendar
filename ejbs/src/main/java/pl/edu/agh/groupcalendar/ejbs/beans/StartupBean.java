@@ -43,23 +43,11 @@ public class StartupBean {
         InitLog4j.initLog4j(log4jConfigPath, log4jConfigFileName);
         LOGGER.info(methodName + "Log4j initialized!");
 
-        /*try {
-            Class.forName("com.mysql.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            LOGGER.error("MySQL driver not found!", e);
-        }*/
-
         try (Connection con = ds.getConnection(); Connection con2 = ds2.getConnection()){
             LOGGER.info("DB connected");
 
             LOGGER.info("Driver: " + con.getMetaData().getDriverName() + " " + con.getMetaData().getDriverVersion());
             LOGGER.info("Driver 2: " + con2.getMetaData().getDriverName() + " " + con2.getMetaData().getDriverVersion());
-
-            //Connection conUnwrapped = con.unwrap(Connection.class);
-            //Connection conUnwrapped2 = con2.unwrap(Connection.class);
-
-            //LOGGER.info("Con1: " + conUnwrapped.getSchema());
-            //LOGGER.info("Con2: " + conUnwrapped2.getSchema());
         } catch (SQLException e) {
             LOGGER.error("Cannot get connection to DB!", e);
         }

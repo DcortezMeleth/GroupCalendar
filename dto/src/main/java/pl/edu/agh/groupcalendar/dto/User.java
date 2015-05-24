@@ -1,4 +1,4 @@
-package pl.edu.agh.groupcalendar.utils;
+package pl.edu.agh.groupcalendar.dto;
 
 import javax.persistence.Id;
 import javax.persistence.Entity;

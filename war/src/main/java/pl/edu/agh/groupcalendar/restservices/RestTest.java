@@ -1,7 +1,7 @@
 package pl.edu.agh.groupcalendar.restservices;
 
+import pl.edu.agh.groupcalendar.dto.User;
 import pl.edu.agh.groupcalendar.ejbs.interfaces.IMyBean;
-import pl.edu.agh.groupcalendar.utils.User;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;

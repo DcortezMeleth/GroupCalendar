@@ -3,11 +3,10 @@ package pl.edu.agh.groupcalendar.ejbs.beans;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import pl.edu.agh.groupcalendar.ejbs.interfaces.IMyBean;
-import pl.edu.agh.groupcalendar.utils.User;
+import pl.edu.agh.groupcalendar.dto.User;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
-import javax.jws.soap.SOAPBinding;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;

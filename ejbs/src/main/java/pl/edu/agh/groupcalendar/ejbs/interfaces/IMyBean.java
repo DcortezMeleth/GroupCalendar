@@ -1,6 +1,6 @@
 package pl.edu.agh.groupcalendar.ejbs.interfaces;
 
-import pl.edu.agh.groupcalendar.utils.User;
+import pl.edu.agh.groupcalendar.dto.User;
 
 import javax.ejb.Local;
 import java.util.Date;

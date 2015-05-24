@@ -8,5 +8,6 @@
             <property name="showSql" value="true"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
         </properties>
+        <jar-file>lib/dto-1.0.jar</jar-file>
     </persistence-unit>
 </persistence>

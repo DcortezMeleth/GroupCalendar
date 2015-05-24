@@ -20,15 +20,23 @@ allprojects {
     }
 }
 
+project(":dto") {
+    apply plugin: "java"
+
+    dependencies {
+        compile group: 'javax.persistence', name: 'persistence-api', version: '1.0.2'
+    }
+}
+
 project(":ejbs") {
     apply plugin: "java"
 
     dependencies {
+        compile project(':dto')
         compile group: 'javax.ejb', name: 'javax.ejb-api', version: '3.2'
         compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.2'
         compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.2'
         compile group: 'javax.persistence', name: 'persistence-api', version: '1.0.2'
-        //compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.18'
     }
 }
 
@@ -37,6 +45,7 @@ project(":war") {
 
     dependencies {
         providedCompile project(':ejbs')
+        providedCompile project(':dto')
         compile group: 'javax.ejb', name: 'javax.ejb-api', version: '3.2'
         providedCompile group: 'org.jboss.resteasy', name: 'resteasy-jaxrs', version: '3.0.11.Final'
         compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.2'
