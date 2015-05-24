@@ -31,11 +31,6 @@ public class AuthBean implements IAuthBean {
     }
 
     @Override
-    public Date getCurrentDate() {
-        return new Date();
-    }
-
-    @Override
     public void insertUser(final User user) {
         entityManager.persist(user);
     }
