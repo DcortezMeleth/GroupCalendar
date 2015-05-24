@@ -17,14 +17,16 @@ public class User implements Serializable {
 
     private final static long serialVersionUID = 1435232L;
 
+    public static final String GET_ALL_USERS = "SELECT p from gc_users p";
+
     @Id
     private int us_id;
 
     @OneToMany(mappedBy = "gc_admin")
-    private List<Group> administeredGroups;
+    private transient List<Group> administeredGroups;
 
     @ManyToMany(mappedBy = "users")
-    private List<Group> groups;
+    private transient List<Group> groups;
 
     private String us_username;
 

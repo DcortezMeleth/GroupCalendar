@@ -48,8 +48,7 @@ public class MyBean implements IMyBean {
 
     @Override
     public List<User> getUsers() {
-        String q = "SELECT p from gc_users p";
-        Query query = entityManager.createQuery(q);
+        Query query = entityManager.createQuery(User.GET_ALL_USERS);
         return query.getResultList();
     }
 

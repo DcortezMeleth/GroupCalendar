@@ -21,7 +21,7 @@ public class Event implements Serializable {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "gc_us_id")
-    private Group group;
+    private transient Group group;
 
     private String ev_name;
 

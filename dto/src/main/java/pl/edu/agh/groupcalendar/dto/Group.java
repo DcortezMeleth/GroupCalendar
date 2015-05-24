@@ -22,7 +22,7 @@ public class Group implements Serializable {
     private User gc_admin;
 
     @OneToMany(mappedBy = "group")
-    private List<Event> events;
+    private transient List<Event> events;
 
     @ManyToMany
     @JoinTable(
@@ -30,7 +30,7 @@ public class Group implements Serializable {
             joinColumns = {@JoinColumn(name = "ug_gr_id", referencedColumnName = "gr_id")},
             inverseJoinColumns = {@JoinColumn(name = "ug_us_id", referencedColumnName = "us_id")}
     )
-    private List<User> users;
+    private transient List<User> users;
 
     private String gr_name;
 
