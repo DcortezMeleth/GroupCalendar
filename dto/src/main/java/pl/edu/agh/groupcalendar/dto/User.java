@@ -1,9 +1,12 @@
 package pl.edu.agh.groupcalendar.dto;
 
-import javax.persistence.Id;
 import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Bartosz
@@ -16,6 +19,12 @@ public class User implements Serializable {
 
     @Id
     private int us_id;
+
+    @OneToMany(mappedBy = "gc_admin")
+    private List<Group> administeredGroups;
+
+    @ManyToMany(mappedBy = "users")
+    private List<Group> groups;
 
     private String us_username;
 
@@ -41,6 +50,22 @@ public class User implements Serializable {
 
     public User() {
         super();
+    }
+
+    public List<Group> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(List<Group> groups) {
+        this.groups = groups;
+    }
+
+    public List<Group> getAdministeredGroups() {
+        return administeredGroups;
+    }
+
+    public void setAdministeredGroups(List<Group> administeredGroups) {
+        this.administeredGroups = administeredGroups;
     }
 
     public static long getSerialVersionUID() {
@@ -145,6 +170,6 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "Name: " + us_name + " Username: " + us_username + " Email: " + us_email;
+        return "Id: " + us_id + " Name: " + us_name + " Username: " + us_username + " Email: " + us_email;
     }
 }
