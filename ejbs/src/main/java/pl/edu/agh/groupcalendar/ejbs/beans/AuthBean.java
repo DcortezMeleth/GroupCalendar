@@ -18,21 +18,25 @@ import java.util.StringTokenizer;
 import java.util.UUID;
 
 /**
+ * Bean serving authentication services.
  * @author Bartosz
  *         Created on 2015-04-27.
  */
 @Stateless(name = "MyBean")
 public class AuthBean implements IAuthBean {
 
+    /** Logger. */
     private static final Logger LOGGER = LogManager.getLogger(AuthBean.class);
+
+    /** Mock service key for mobile application. */
+    private static final String MOCK_SERVICE_KEY = "987456321";
 
     @PersistenceContext(unitName = "group_calendar")
     private EntityManager entityManager;
 
     @PostConstruct
     private void test() {
-        LOGGER.debug("Bean zyje!");
-        LOGGER.info(Base64.encode("Dcortez:dupa".getBytes()));
+        LOGGER.info("Encoded:" + Base64.encode("Dcortez:dupa".getBytes()));
     }
 
     @Override
@@ -89,6 +93,19 @@ public class AuthBean implements IAuthBean {
         entityManager.getTransaction().commit();
 
         return true;
+    }
+
+    @Override
+    public boolean validateServiceKey(final String serviceKey) {
+        return MOCK_SERVICE_KEY.equals(serviceKey);
+    }
+
+    @Override
+    public boolean validateSessionKey(final String sessionKey) {
+        Query query = entityManager.createQuery(Session.GET_SESSION_BY_SESSION_KEY).setParameter("ss_key", sessionKey);
+        Session session = (Session) query.getSingleResult();
+
+        return session != null;
     }
 
     @Override

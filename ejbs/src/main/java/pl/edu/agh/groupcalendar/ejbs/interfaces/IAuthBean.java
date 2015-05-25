@@ -29,6 +29,20 @@ public interface IAuthBean {
      */
     boolean logout(final String sessionKey, final String username);
 
+    /**
+     * Check if service key is correct.
+     * @param serviceKey serviceKey
+     * @return true if correct, false otherwise
+     */
+    boolean validateServiceKey(final String serviceKey);
+
+    /**
+     * Check if session is valid.
+     * @param sessionKey active session key
+     * @return true if valid, false otherwise
+     */
+    boolean validateSessionKey(final String sessionKey);
+
     void insertUser(final User user);
 
     List<User> getUsers();

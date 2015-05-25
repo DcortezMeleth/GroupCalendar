@@ -2,8 +2,11 @@ package pl.edu.agh.groupcalendar.restservices.security;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import pl.edu.agh.groupcalendar.ejbs.interfaces.IAuthBean;
 import pl.edu.agh.groupcalendar.restservices.services.LoginService;
 
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.PreMatching;
@@ -32,11 +35,22 @@ public class SecurityRequestFilter implements ContainerRequestFilter {
             return;
         }
 
-        //TODO: pobrac beana do autoryzacji i uzywac go
+        IAuthBean authBean = null;
+        try {
+            InitialContext context = new InitialContext();
+            authBean = (IAuthBean) context.lookup("java:module/AuthBean");
+        } catch (NamingException e) {
+            LOGGER.error("Cannot retrive auth bean!", e);
+        }
+
+        if(authBean == null) {
+            requestContext.abortWith(Response.status(Response.Status.INTERNAL_SERVER_ERROR).build());
+            return;
+        }
 
         //Check if service key exists and is valid
         String serviceKey = requestContext.getHeaderString(LoginService.SERVICE_KEY);
-        if(!"testServiceKey".equals(serviceKey)) {
+        if(authBean.validateServiceKey(serviceKey)) {
             requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
             return;
         }
@@ -45,7 +59,7 @@ public class SecurityRequestFilter implements ContainerRequestFilter {
         if(!path.startsWith("/auth/login")) {
             String authToken = requestContext.getHeaderString(LoginService.AUTH_TOKEN);
 
-            if(!"authoToken".equals(authToken)) {
+            if(authBean.validateSessionKey(authToken)) {
                 requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
             }
         }
