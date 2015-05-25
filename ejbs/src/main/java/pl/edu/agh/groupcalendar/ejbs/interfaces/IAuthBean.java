@@ -6,13 +6,17 @@ import javax.ejb.Local;
 import java.util.List;
 
 /**
+ * Authentication services facade.
+ *
  * @author Bartosz
  *         Created on 2015-04-27.
  */
 @Local
 public interface IAuthBean {
 
+
     String NO_SUCH_USER_ERROR_CODE = "-1";
+
     String WRONG_PASSWORD_ERROR_CODE = "-2";
 
     /**

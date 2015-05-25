@@ -66,7 +66,7 @@ public class LoginService {
         boolean result = authBean.logout(httpHeaders.getHeaderString(LoginService.AUTH_TOKEN), username);
 
         if(!result) {
-            return Response.status(Response.Status.UNAUTHORIZED).build();
+            return Response.status(Response.Status.UNAUTHORIZED).entity(SESSION_NOT_EXISTS_JSON).build();
         }
 
         return Response.ok().build();
