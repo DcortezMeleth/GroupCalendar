@@ -4,8 +4,8 @@ import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import pl.edu.agh.groupcalendar.dto.Session;
-import pl.edu.agh.groupcalendar.ejbs.interfaces.IAuthBean;
 import pl.edu.agh.groupcalendar.dto.User;
+import pl.edu.agh.groupcalendar.ejbs.interfaces.IAuthBean;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
@@ -13,12 +13,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.Date;
-import java.util.List;
 import java.util.StringTokenizer;
 import java.util.UUID;
 
 /**
  * Bean serving authentication services.
+ *
  * @author Bartosz
  *         Created on 2015-04-27.
  */
@@ -50,13 +50,13 @@ public class AuthBean implements IAuthBean {
         User user = (User) query.getSingleResult();
 
         //jesli nie ma uzytkownika na bazie zwracamy null
-        if(user == null) {
+        if (user == null) {
             return NO_SUCH_USER_ERROR_CODE;
         }
 
         //jesli haslo nie istnieje lub jest niepoprawne zwracamy null
         String dbPassword = user.getUs_password();
-        if(dbPassword == null || !dbPassword.equals(password)) {
+        if (dbPassword == null || !dbPassword.equals(password)) {
             return WRONG_PASSWORD_ERROR_CODE;
         }
 
@@ -65,7 +65,9 @@ public class AuthBean implements IAuthBean {
         session.setUser(user);
         session.setSs_last_action(new Date());
         session.setSs_key(UUID.randomUUID().toString());
+        entityManager.getTransaction().begin();
         entityManager.persist(session);
+        entityManager.getTransaction().commit();
 
         //zwracamy klucz sesji
         return session.getSs_key();
@@ -76,7 +78,7 @@ public class AuthBean implements IAuthBean {
         Query getUserQuery = entityManager.createQuery(User.GET_USER_BY_USERNAME).setParameter("username", username);
         User user = (User) getUserQuery.getSingleResult();
 
-        if(user == null) {
+        if (user == null) {
             return false;
         }
 
@@ -84,7 +86,7 @@ public class AuthBean implements IAuthBean {
                 .setParameter("us_id", user.getUs_id()).setParameter("ss_key", sessionKey);
         Session session = (Session) getSessionQuery.getSingleResult();
 
-        if(session == null) {
+        if (session == null) {
             return false;
         }
 
@@ -109,15 +111,18 @@ public class AuthBean implements IAuthBean {
     }
 
     @Override
-    public void insertUser(final User user) {
+    public String register(final User user) {
+        Query query = entityManager.createQuery(User.GET_USER_BY_USERNAME_OR_EMAIL)
+                .setParameter("username", user.getUs_username()).setParameter("email", user.getUs_email());
+
+        if (query.getResultList().size() != 0) {
+            User user1 = (User) query.getResultList().get(0);
+            return user1.getUs_username().equals(user.getUs_username()) ? USERNAME_EXISTS_ERROR_CODE : EMAIL_EXISTS_ERROR_CODE;
+        }
+
+        entityManager.getTransaction().begin();
         entityManager.persist(user);
+        entityManager.getTransaction().commit();
+        return "0";
     }
-
-    @Override
-    public List<User> getUsers() {
-        Query query = entityManager.createQuery(User.GET_ALL_USERS);
-        return query.getResultList();
-    }
-
-
 }
