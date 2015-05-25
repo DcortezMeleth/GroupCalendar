@@ -8,13 +8,22 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
+ * Represents active user session.
+ *
  * @author Bartosz
  *         Created on 2015-05-24.
  */
 @Entity(name = "gc_sessions")
 public class Session implements Serializable {
 
+    /** serialVersionUID */
     private static final long serialVersionUID = 8790432890L;
+
+    /** Get session for given user_id and ss_key. */
+    public static final String GET_SESSION_BY_USER_ID_AND_SESSION_KEY = "SELECT s FROM gc_sessions s WHERE s.ss_us_id = :us_id and s.ss_key = :ss_key";
+
+    /** Deletes session for given user_id. */
+    public static final String DELETE_USER_SESSION = "DELETE s FROM gc_users s WHERE s.ss_us_id = :us_id";
 
     @Id
     private int ss_id;

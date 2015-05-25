@@ -24,7 +24,6 @@ project(":dto") {
     apply plugin: "java"
 
     dependencies {
-        compile group: 'javax.persistence', name: 'persistence-api', version: '1.0.2'
     }
 }
 
@@ -36,7 +35,6 @@ project(":ejbs") {
         compile group: 'javax.ejb', name: 'javax.ejb-api', version: '3.2'
         compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.2'
         compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.2'
-        compile group: 'javax.persistence', name: 'persistence-api', version: '1.0.2'
     }
 }
 

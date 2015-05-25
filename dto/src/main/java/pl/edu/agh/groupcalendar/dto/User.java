@@ -9,6 +9,8 @@ import java.util.Date;
 import java.util.List;
 
 /**
+ * Represents user in backend system.
+ *
  * @author Bartosz
  *         Created on 2015-05-23.
  */
@@ -17,7 +19,11 @@ public class User implements Serializable {
 
     private final static long serialVersionUID = 1435232L;
 
-    public static final String GET_ALL_USERS = "SELECT p from gc_users p";
+    /** Get all users. */
+    public static final String GET_ALL_USERS = "SELECT u FROM gc_users u";
+
+    /** Get user for given username. */
+    public static final String GET_USER_BY_USERNAME = "SELECT u FROM gc_users u WHERE u.us_username = :username";
 
     @Id
     private int us_id;
