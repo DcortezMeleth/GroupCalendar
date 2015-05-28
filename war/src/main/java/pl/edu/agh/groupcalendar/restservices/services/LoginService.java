@@ -27,7 +27,7 @@ public class LoginService {
     public static final String SERVICE_KEY = "service_key";
 
     /** Auth token header tag. */
-    public static final String AUTH_TOKEN = "auth_token";
+    public static final String SESSION_KEY = "session_key";
 
     private static final String NO_USER_JSON = "{\"error_no\":\"-1\", \"error_desc\":\"User does not exists.\"}";
 
@@ -64,13 +64,13 @@ public class LoginService {
             return Response.status(Response.Status.UNAUTHORIZED).type(MediaType.APPLICATION_JSON).entity(WRONG_PASSWORD_JSON).build();
         }
 
-        return Response.ok("{\"session_key\":\"" + sessionKey + "\"}").build();
+        return Response.ok("{\"" + SESSION_KEY + "\":\"" + sessionKey + "\"}").build();
     }
 
     @POST
     @Path("/logout/{username}")
     public Response logout(@Context HttpHeaders httpHeaders, @PathParam("username") String username) {
-        boolean result = authBean.logout(httpHeaders.getHeaderString(LoginService.AUTH_TOKEN), username);
+        boolean result = authBean.logout(httpHeaders.getHeaderString(LoginService.SESSION_KEY), username);
 
         if (!result) {
             return Response.status(Response.Status.UNAUTHORIZED).entity(SESSION_NOT_EXISTS_JSON).build();
@@ -79,7 +79,7 @@ public class LoginService {
         return Response.ok().build();
     }
 
-    @PUT
+    @POST
     @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)

@@ -31,6 +31,6 @@ public class SecurityResponseFilter implements ContainerResponseFilter {
         responseContext.getHeaders().add( "Access-Control-Allow-Origin", "*" );
         responseContext.getHeaders().add( "Access-Control-Allow-Credentials", "true" );
         responseContext.getHeaders().add( "Access-Control-Allow-Methods", "GET, POST, DELETE, PUT" );
-        responseContext.getHeaders().add( "Access-Control-Allow-Headers", LoginService.AUTH_TOKEN + ", " + LoginService.SERVICE_KEY );
+        responseContext.getHeaders().add( "Access-Control-Allow-Headers", LoginService.SESSION_KEY + ", " + LoginService.SERVICE_KEY );
     }
 }

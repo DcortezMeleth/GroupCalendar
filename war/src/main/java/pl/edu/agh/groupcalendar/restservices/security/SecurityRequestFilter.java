@@ -45,7 +45,7 @@ public class SecurityRequestFilter implements ContainerRequestFilter {
             InitialContext context = new InitialContext();
             authBean = (IAuthBean) context.lookup("java:global/ear-1.0/ejbs-1.0/AuthBean!pl.edu.agh.groupcalendar.ejbs.interfaces.IAuthBean");
         } catch (NamingException e) {
-            LOGGER.error("Cannot retrive auth bean!", e);
+            LOGGER.error("Cannot retrieve auth bean!", e);
         }
 
         if(authBean == null) {
@@ -62,7 +62,7 @@ public class SecurityRequestFilter implements ContainerRequestFilter {
 
         //For other methods besides login
         if(!path.startsWith("/auth/login") && !path.startsWith("/auth/register") && !path.startsWith("/auth/status")) {
-            String authToken = requestContext.getHeaderString(LoginService.AUTH_TOKEN);
+            String authToken = requestContext.getHeaderString(LoginService.SESSION_KEY);
 
             if(authBean.validateSessionKey(authToken)) {
                 requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());

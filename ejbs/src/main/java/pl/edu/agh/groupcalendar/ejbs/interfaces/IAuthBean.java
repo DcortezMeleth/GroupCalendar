@@ -29,7 +29,8 @@ public interface IAuthBean {
      * Login to system.
      *
      * @param credentials encoded credentials
-     * @return session key if login succeed, null otherwise.
+     * @return session key if login succeed, {@link #NO_SUCH_USER_ERROR_CODE} when user does not exists
+     *      or {@link #WRONG_PASSWORD_ERROR_CODE} when user entered wrong password
      */
     String login(final String credentials);
 
@@ -61,6 +62,8 @@ public interface IAuthBean {
      * Register user.
      *
      * @param user newly created user
+     * @return "0" if registered, {@link #USERNAME_EXISTS_ERROR_CODE} if username already taken
+     *      or {@link #EMAIL_EXISTS_ERROR_CODE} if user with this email already exists
      */
     String register(final User user);
 }

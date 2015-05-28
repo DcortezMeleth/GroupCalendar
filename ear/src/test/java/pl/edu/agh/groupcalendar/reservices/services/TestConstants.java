@@ -9,12 +9,6 @@ package pl.edu.agh.groupcalendar.reservices.services;
  */
 public interface TestConstants {
 
-    /** Service key header tag. */
-    String SERVICE_KEY = "service_key";
-
-    /** Auth token header tag. */
-    String AUTH_TOKEN = "auth_token";
-
     /** Mock service key for mobile application. */
     String MOCK_SERVICE_KEY = "987456321";
 

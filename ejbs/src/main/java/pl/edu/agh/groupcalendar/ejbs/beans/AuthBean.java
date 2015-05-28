@@ -42,8 +42,9 @@ public class AuthBean implements IAuthBean {
         String username = tokenizer.nextToken();
         String password = tokenizer.nextToken();
 
-        Query query = entityManager.createQuery(User.GET_USER_BY_USERNAME).setParameter("username", username);
-        User user = (User) query.getSingleResult();
+        TypedQuery<User> query = entityManager.createQuery(User.GET_USER_BY_USERNAME, User.class)
+                .setParameter("username", username);
+        User user = query.getResultList().size() != 0 ? query.getSingleResult() : null;
 
         //jesli nie ma uzytkownika na bazie zwracamy null
         if (user == null) {
@@ -61,9 +62,9 @@ public class AuthBean implements IAuthBean {
         session.setUser(user);
         session.setSs_last_action(new Date());
         session.setSs_key(UUID.randomUUID().toString());
-        entityManager.getTransaction().begin();
         entityManager.persist(session);
-        entityManager.getTransaction().commit();
+
+        LOGGER.debug("User with id:" + user.getUs_id() + " logged in.");
 
         //zwracamy klucz sesji
         return session.getSs_key();
@@ -71,25 +72,26 @@ public class AuthBean implements IAuthBean {
 
     @Override
     public boolean logout(final String sessionKey, final String username) {
-        Query getUserQuery = entityManager.createQuery(User.GET_USER_BY_USERNAME).setParameter("username", username);
-        User user = (User) getUserQuery.getSingleResult();
+        TypedQuery<User> getUserQuery = entityManager.createQuery(User.GET_USER_BY_USERNAME, User.class)
+                .setParameter("username", username);
+        User user = getUserQuery.getResultList().size() != 0 ? getUserQuery.getSingleResult() : null;
 
         if (user == null) {
             return false;
         }
 
-        Query getSessionQuery = entityManager.createQuery(Session.GET_SESSION_BY_USER_ID_AND_SESSION_KEY)
-                .setParameter("us_id", user.getUs_id()).setParameter("ss_key", sessionKey);
-        Session session = (Session) getSessionQuery.getSingleResult();
+        LOGGER.debug("User with id:" + user.getUs_id() + " logged out.");
+
+        TypedQuery<Session> getSessionQuery =
+                entityManager.createQuery(Session.GET_SESSION_BY_USER_ID_AND_SESSION_KEY, Session.class)
+                .setParameter("user", user).setParameter("sessionKey", sessionKey);
+        Session session = getSessionQuery.getResultList().size() != 0 ? getSessionQuery.getSingleResult() : null;
 
         if (session == null) {
             return false;
         }
 
-        entityManager.getTransaction().begin();
         entityManager.remove(session);
-        entityManager.getTransaction().commit();
-
         return true;
     }
 
@@ -110,17 +112,16 @@ public class AuthBean implements IAuthBean {
 
     @Override
     public String register(final User user) {
-        Query query = entityManager.createQuery(User.GET_USER_BY_USERNAME_OR_EMAIL)
+        TypedQuery<User> query = entityManager.createQuery(User.GET_USER_BY_USERNAME_OR_EMAIL, User.class)
                 .setParameter("username", user.getUs_username()).setParameter("email", user.getUs_email());
 
         if (query.getResultList().size() != 0) {
-            User user1 = (User) query.getResultList().get(0);
+            LOGGER.debug("Cannot register user! Username or email already in db.");
+            User user1 = query.getResultList().get(0);
             return user1.getUs_username().equals(user.getUs_username()) ? USERNAME_EXISTS_ERROR_CODE : EMAIL_EXISTS_ERROR_CODE;
         }
 
-        entityManager.getTransaction().begin();
         entityManager.persist(user);
-        entityManager.getTransaction().commit();
         return "0";
     }
 }
