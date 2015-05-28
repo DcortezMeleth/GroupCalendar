@@ -1,3 +1,5 @@
+def deployPath = 'g:\\jboss-as-7.1.1.Final\\jboss-as-7.1.1.Final\\standalone\\deployments\\'
+
 buildscript {
     repositories {
         mavenCentral()
@@ -6,6 +8,7 @@ buildscript {
 
 allprojects {
     apply plugin: "idea"
+    apply plugin: "java"
 
     version = "1.0"
     ext {
@@ -21,20 +24,20 @@ allprojects {
 }
 
 project(":dto") {
-    apply plugin: "java"
 
     dependencies {
+        compile group: 'org.apache.openjpa', name: 'openjpa', version: '2.3.0'
     }
 }
 
 project(":ejbs") {
-    apply plugin: "java"
 
     dependencies {
         compile project(':dto')
         compile group: 'javax.ejb', name: 'javax.ejb-api', version: '3.2'
         compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.2'
         compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.2'
+        compile group: 'commons-codec', name: 'commons-codec', version: '1.10'
     }
 }
 
@@ -53,13 +56,13 @@ project(":war") {
 }
 
 project(":ear") {
-    apply plugin: "java"
     apply plugin: "ear"
 
     dependencies {
         deploy project(":ejbs")
         deploy project(path:":war", configuration:'archives')
         earlib project(path:":ejbs", configuration:"compile")
+        testCompile project(':war')
         testCompile group: 'junit', name: 'junit', version: '4.12'
         testCompile group: 'commons-httpclient', name: 'commons-httpclient', version: '3.1'
         testCompile group: 'org.jboss.resteasy', name: 'resteasy-jaxrs', version: '3.0.11.Final'
@@ -74,12 +77,15 @@ project(":ear") {
 
         jvmArgs '-XX:MaxPermSize=256m'
 
-        beforeSuite {
-            logger.lifecycle("Starting tests!")
-        }
-
         beforeTest { descriptor ->
             logger.lifecycle("Running test: " + descriptor)
         }
     }
+}
+
+task('copyEar', type: Copy) {
+    from('ear/build/libs') {
+        include '*.ear'
+    }
+    into deployPath
 }

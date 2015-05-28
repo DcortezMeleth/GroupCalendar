@@ -12,6 +12,9 @@ import javax.ws.rs.ext.Provider;
 import java.io.IOException;
 
 /**
+ * Response filer. <br>
+ * Adds appropriate headers.
+ *
  * @author Bartosz
  *         Created on 2015-05-24.
  */

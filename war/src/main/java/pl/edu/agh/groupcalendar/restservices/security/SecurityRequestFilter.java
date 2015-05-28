@@ -15,6 +15,10 @@ import javax.ws.rs.ext.Provider;
 import java.io.IOException;
 
 /**
+ * Request filer. <br>
+ * Checks for session key in header. <br>
+ * Allows for requests without key only to login, register and status service.
+ *
  * @author Bartosz
  *         Created on 2015-05-25.
  */
@@ -28,6 +32,7 @@ public class SecurityRequestFilter implements ContainerRequestFilter {
     public void filter(ContainerRequestContext requestContext) throws IOException {
         String path = requestContext.getUriInfo().getPath();
         LOGGER.info("Filtering request path: " + path);
+        System.out.println("Filtering request path: " + path);
 
         //In case of browser tests
         if("OPTIONS".equals(requestContext.getMethod())) {
@@ -38,7 +43,7 @@ public class SecurityRequestFilter implements ContainerRequestFilter {
         IAuthBean authBean = null;
         try {
             InitialContext context = new InitialContext();
-            authBean = (IAuthBean) context.lookup("java:module/AuthBean");
+            authBean = (IAuthBean) context.lookup("java:global/ear-1.0/ejbs-1.0/AuthBean!pl.edu.agh.groupcalendar.ejbs.interfaces.IAuthBean");
         } catch (NamingException e) {
             LOGGER.error("Cannot retrive auth bean!", e);
         }
@@ -50,13 +55,13 @@ public class SecurityRequestFilter implements ContainerRequestFilter {
 
         //Check if service key exists and is valid
         String serviceKey = requestContext.getHeaderString(LoginService.SERVICE_KEY);
-        if(authBean.validateServiceKey(serviceKey)) {
+        if(!authBean.validateServiceKey(serviceKey)) {
             requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
             return;
         }
 
         //For other methods besides login
-        if(!path.startsWith("/auth/login")) {
+        if(!path.startsWith("/auth/login") && !path.startsWith("/auth/register") && !path.startsWith("/auth/status")) {
             String authToken = requestContext.getHeaderString(LoginService.AUTH_TOKEN);
 
             if(authBean.validateSessionKey(authToken)) {

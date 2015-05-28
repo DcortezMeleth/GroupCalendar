@@ -1,18 +1,19 @@
 package pl.edu.agh.groupcalendar.ejbs.beans;
 
-import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import pl.edu.agh.groupcalendar.dto.Session;
 import pl.edu.agh.groupcalendar.dto.User;
 import pl.edu.agh.groupcalendar.ejbs.interfaces.IAuthBean;
 
-import javax.annotation.PostConstruct;
+import org.apache.commons.codec.binary.Base64;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import java.util.Date;
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.UUID;
 
@@ -22,7 +23,7 @@ import java.util.UUID;
  * @author Bartosz
  *         Created on 2015-04-27.
  */
-@Stateless(name = "MyBean")
+@Stateless
 public class AuthBean implements IAuthBean {
 
     /** Logger. */
@@ -34,14 +35,9 @@ public class AuthBean implements IAuthBean {
     @PersistenceContext(unitName = "group_calendar")
     private EntityManager entityManager;
 
-    @PostConstruct
-    private void test() {
-        LOGGER.info("Encoded:" + Base64.encode("Dcortez:dupa".getBytes()));
-    }
-
     @Override
-    public String login(String credentials) {
-        String usernameAndPassword = new String(Base64.decode(credentials));
+    public String login(final String credentials) {
+        String usernameAndPassword = new String(Base64.decodeBase64(credentials));
         StringTokenizer tokenizer = new StringTokenizer(usernameAndPassword, ":");
         String username = tokenizer.nextToken();
         String password = tokenizer.nextToken();
@@ -104,10 +100,12 @@ public class AuthBean implements IAuthBean {
 
     @Override
     public boolean validateSessionKey(final String sessionKey) {
-        Query query = entityManager.createQuery(Session.GET_SESSION_BY_SESSION_KEY).setParameter("ss_key", sessionKey);
-        Session session = (Session) query.getSingleResult();
+        TypedQuery<Session> query = entityManager.createQuery(Session.GET_SESSION_BY_SESSION_KEY, Session.class)
+                .setParameter("ss_key", sessionKey);
 
-        return session != null;
+        List<Session> result = query.getResultList();
+
+        return result.size() == 1 && result.get(0).getSs_key().equals(sessionKey);
     }
 
     @Override
