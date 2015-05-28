@@ -69,8 +69,6 @@ project(":ear") {
     test {
         testLogging.showStandardStreams = true
 
-        testSrcDirs = ['src/main/test']
-
         minHeapSize = "128m"
         maxHeapSize = "256m"
 
