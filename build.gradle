@@ -60,5 +60,28 @@ project(":ear") {
         deploy project(":ejbs")
         deploy project(path:":war", configuration:'archives')
         earlib project(path:":ejbs", configuration:"compile")
+        testCompile group: 'junit', name: 'junit', version: '4.12'
+        testCompile group: 'commons-httpclient', name: 'commons-httpclient', version: '3.1'
+        testCompile group: 'org.jboss.resteasy', name: 'resteasy-jaxrs', version: '3.0.11.Final'
+        testCompile group: 'com.google.code.gson', name: 'gson', version: '2.3.1'
+    }
+
+    test {
+        testLogging.showStandardStreams = true
+
+        testSrcDirs = ['src/main/test']
+
+        minHeapSize = "128m"
+        maxHeapSize = "256m"
+
+        jvmArgs '-XX:MaxPermSize=256m'
+
+        beforeSuite {
+            logger.lifecycle("Starting tests!")
+        }
+
+        beforeTest { descriptor ->
+            logger.lifecycle("Running test: " + descriptor)
+        }
     }
 }

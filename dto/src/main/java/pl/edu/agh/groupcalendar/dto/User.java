@@ -17,16 +17,15 @@ import java.util.List;
 @Entity(name = "gc_users")
 public class User implements Serializable {
 
+    /** serialVersionUID. */
     private final static long serialVersionUID = 1435232L;
-
-    /** Get all users. */
-    public static final String GET_ALL_USERS = "SELECT u FROM gc_users u";
 
     /** Get user for given username. */
     public static final String GET_USER_BY_USERNAME = "SELECT u FROM gc_users u WHERE u.us_username = :username";
 
     /** Get user for given username or email. */
-    public static final String GET_USER_BY_USERNAME_OR_EMAIL = "SELECT u FROM gc_users u WHERE u.us_username = :username OR u.us_email = :email";
+    public static final String GET_USER_BY_USERNAME_OR_EMAIL = "SELECT u FROM gc_users u WHERE u.us_username = " +
+            ":username OR u.us_email = :email";
 
     @Id
     private int us_id;
