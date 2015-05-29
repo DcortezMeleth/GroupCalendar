@@ -64,7 +64,7 @@ public class SecurityRequestFilter implements ContainerRequestFilter {
         if(!path.startsWith("/auth/login") && !path.startsWith("/auth/register") && !path.startsWith("/auth/status")) {
             String authToken = requestContext.getHeaderString(LoginService.SESSION_KEY);
 
-            if(authBean.validateSessionKey(authToken)) {
+            if(!authBean.validateSessionKey(authToken)) {
                 requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
             }
         }

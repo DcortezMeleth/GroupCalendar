@@ -79,6 +79,7 @@ public class LoginServiceTest {
 
         PostMethod logout = new PostMethod(TestConstants.LOGIN_SERVICE + "logout/Dcortez1");
         logout.setRequestHeader(LoginService.SERVICE_KEY, TestConstants.MOCK_SERVICE_KEY);
+        logout.setRequestHeader(LoginService.SESSION_KEY, sessionKey);
         status = httpClient.executeMethod(logout);
 
         Assert.assertEquals(HttpResponseCodes.SC_OK, status);

@@ -36,6 +36,9 @@ public class User implements Serializable {
     @ManyToMany(mappedBy = "users")
     private transient List<Group> groups;
 
+    @OneToMany(mappedBy = "user")
+    private transient List<Session> sessions;
+
     private String us_username;
 
     private String us_name;
@@ -60,6 +63,14 @@ public class User implements Serializable {
 
     public User() {
         super();
+    }
+
+    public List<Session> getSessions() {
+        return sessions;
+    }
+
+    public void setSessions(final List<Session> sessions) {
+        this.sessions = sessions;
     }
 
     public List<Group> getGroups() {
