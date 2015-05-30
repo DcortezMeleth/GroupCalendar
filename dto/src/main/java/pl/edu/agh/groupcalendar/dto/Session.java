@@ -33,7 +33,7 @@ public class Session implements Serializable {
     private int ss_id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "ss_us_id")
+    @JoinColumn(name = "ss_us_id", nullable = false)
     private User user;
 
     private String ss_key;

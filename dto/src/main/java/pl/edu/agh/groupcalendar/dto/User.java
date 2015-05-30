@@ -1,9 +1,6 @@
 package pl.edu.agh.groupcalendar.dto;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -30,13 +27,13 @@ public class User implements Serializable {
     @Id
     private int us_id;
 
-    @OneToMany(mappedBy = "gc_admin")
+    @OneToMany(mappedBy = "gc_admin", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     private transient List<Group> administeredGroups;
 
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     private transient List<Group> groups;
 
-    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    @OneToMany(mappedBy = "user", orphanRemoval = true, fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     private transient List<Session> sessions;
 
     private String us_username;
