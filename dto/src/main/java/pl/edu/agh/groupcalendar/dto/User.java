@@ -2,6 +2,7 @@ package pl.edu.agh.groupcalendar.dto;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -29,13 +30,13 @@ public class User implements Serializable {
     private int us_id;
 
     @OneToMany(mappedBy = "gc_admin", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
-    private transient List<Group> administeredGroups;
+    private transient List<Group> administeredGroups = new ArrayList<>();
 
     @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
-    private transient List<Group> groups;
+    private transient List<Group> groups = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", orphanRemoval = true, fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
-    private transient List<Session> sessions;
+    private transient List<Session> sessions = new ArrayList<>();
 
     private String us_username;
 
@@ -61,6 +62,30 @@ public class User implements Serializable {
 
     public User() {
         super();
+    }
+
+    public boolean addSession(final Session session) {
+        return sessions.add(session);
+    }
+
+    public boolean removeSession(final Object o) {
+        return sessions.remove(o);
+    }
+
+    public boolean addAdministeredGroup(final Group group) {
+        return administeredGroups.add(group);
+    }
+
+    public boolean removeAdministeredGroup(final Group o) {
+        return administeredGroups.remove(o);
+    }
+
+    public boolean addGroup(final Group group) {
+        return groups.add(group);
+    }
+
+    public boolean removeGroup(final Group o) {
+        return groups.remove(o);
     }
 
     public List<Session> getSessions() {

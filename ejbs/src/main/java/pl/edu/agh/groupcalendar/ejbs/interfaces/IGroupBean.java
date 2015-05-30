@@ -25,6 +25,9 @@ public interface IGroupBean {
     /** Error code - no rioght to modify. */
     String NO_RIGHTS_ERROR_CODE = "-3";
 
+    /** Error code - no rioght to modify. */
+    String USER_DOES_NOT_EXISTS_ERROR_CODE = "-4";
+
     /**
      * Creates group.
      *
@@ -42,7 +45,31 @@ public interface IGroupBean {
      * @param sessionKey user session key
      * @param remove     true if group to remove, false if to modify
      * @return {@link #SUCCESS} if registered, {@link #NO_RIGHTS_ERROR_CODE} if requested by user without correct rights
-     *      or {@link #GROUP_DOES_NOT_EXISTS_ERROR_CODE} if group with this name does not exists
+     *      or {@link #GROUP_DOES_NOT_EXISTS_ERROR_CODE} when group with this name does not exists
      */
     String modify(final Group group, final String sessionKey, final boolean remove);
+
+    /**
+     * Adds user to group
+     *
+     * @param groupName name of group to join
+     * @param userName name od user to add
+     * @param sessionKey session key of assing user
+     * @return {@link #SUCCESS} if registered, {@link #USER_DOES_NOT_EXISTS_ERROR_CODE} when user does not exists
+     *      ,{@link #GROUP_DOES_NOT_EXISTS_ERROR_CODE} if group with this name does not exists or
+     *      {@link #NO_RIGHTS_ERROR_CODE} if requested by user without correct rights
+     */
+    String join(final String groupName, final String userName, final String sessionKey);
+
+    /**
+     * Removes user from group group
+     *
+     * @param groupName name of group to join
+     * @param userName name od user to add
+     * @param sessionKey session key of assing user
+     * @return {@link #SUCCESS} if registered, {@link #USER_DOES_NOT_EXISTS_ERROR_CODE} when user does not exists
+     *      ,{@link #GROUP_DOES_NOT_EXISTS_ERROR_CODE} if group with this name does not exists or
+     *      {@link #NO_RIGHTS_ERROR_CODE} if requested by user without correct rights
+     */
+    String leave(final String groupName, final String userName, final String sessionKey);
 }

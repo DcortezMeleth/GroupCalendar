@@ -2,6 +2,7 @@ package pl.edu.agh.groupcalendar.dto;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class Group implements Serializable {
             joinColumns = {@JoinColumn(name = "ug_gr_id", referencedColumnName = "gr_id")},
             inverseJoinColumns = {@JoinColumn(name = "ug_us_id", referencedColumnName = "us_id")}
     )
-    private transient List<User> users;
+    private transient List<User> users = new ArrayList<>();
 
     private String gr_name;
 
@@ -51,6 +52,22 @@ public class Group implements Serializable {
 
     public List<Event> getEvents() {
         return events;
+    }
+
+    public boolean addUser(final User user) {
+        return users.add(user);
+    }
+
+    public boolean removeUser(final User user) {
+        return users.remove(user);
+    }
+
+    public boolean addEvent(final Event event) {
+        return events.add(event);
+    }
+
+    public boolean removeEvent(final Event event) {
+        return events.remove(event);
     }
 
     public void setEvents(List<Event> events) {

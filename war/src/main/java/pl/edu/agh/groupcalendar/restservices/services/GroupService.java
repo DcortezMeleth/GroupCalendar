@@ -45,6 +45,10 @@ public class GroupService {
     private static final String NO_RIGHTS_JSON =
             "{\"error_no\":\"-3\", \"error_desc\":\"No right to modify this group.\"}";
 
+    /** Return JSON for ERROR_CODE {@link IGroupBean#NO_RIGHTS_ERROR_CODE NO_RIGHTS_ERROR_CODE}. */
+    private static final String USER_DOES_NOT_EXIST_JSON =
+            "{\"error_no\":\"-4\", \"error_desc\":\"No right to modify this group.\"}";
+
     /** Object capable of serialization to and from json. */
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
@@ -82,7 +86,6 @@ public class GroupService {
         return Response.ok().build();
     }
 
-
     /**
      * Creates group in a system
      * @param groupString group JSON string
@@ -113,6 +116,60 @@ public class GroupService {
         } else if(IGroupBean.NO_RIGHTS_ERROR_CODE.equals(result)) {
             return Response.status(Response.Status.CONFLICT).type(MediaType.APPLICATION_JSON)
                     .entity(NO_RIGHTS_JSON).build();
+        }
+
+        return Response.ok().build();
+    }
+
+    /**
+     * Adds user to a group
+     * @param groupName name of group to join
+     * @param username name of user to add
+     * @return {@link Response.Status#OK OK} when group created,
+     *      {@link Response.Status#CONFLICT CONFLICT} with appropriate message when adding did not succeed
+     */
+    @POST
+    @Path("/join")
+    public Response join(@Context HttpHeaders httpHeaders, @QueryParam("groupname") final String groupName,
+                         @QueryParam("username") final String username) {
+        String result = groupBean.join(groupName, username, httpHeaders.getHeaderString(LoginService.SESSION_KEY));
+
+        if(IGroupBean.GROUP_DOES_NOT_EXISTS_ERROR_CODE.equals(result)) {
+            return Response.status(Response.Status.CONFLICT).type(MediaType.APPLICATION_JSON)
+                    .entity(GROUP_NOT_EXIST_JSON).build();
+        } else if(IGroupBean.NO_RIGHTS_ERROR_CODE.equals(result)) {
+            return Response.status(Response.Status.CONFLICT).type(MediaType.APPLICATION_JSON)
+                    .entity(NO_RIGHTS_JSON).build();
+        } else if(IGroupBean.USER_DOES_NOT_EXISTS_ERROR_CODE.equals(result)) {
+            return Response.status(Response.Status.CONFLICT).type(MediaType.APPLICATION_JSON)
+                    .entity(USER_DOES_NOT_EXIST_JSON).build();
+        }
+
+        return Response.ok().build();
+    }
+
+    /**
+     * Removes user from a group
+     * @param groupName name of group to join
+     * @param username name of user to add
+     * @return {@link Response.Status#OK OK} when group created,
+     *      {@link Response.Status#CONFLICT CONFLICT} with appropriate message when adding did not succeed
+     */
+    @POST
+    @Path("/leave")
+    public Response leave(@Context HttpHeaders httpHeaders, @QueryParam("groupname") final String groupName,
+                         @QueryParam("username") final String username) {
+        String result = groupBean.join(groupName, username, httpHeaders.getHeaderString(LoginService.SESSION_KEY));
+
+        if(IGroupBean.GROUP_DOES_NOT_EXISTS_ERROR_CODE.equals(result)) {
+            return Response.status(Response.Status.CONFLICT).type(MediaType.APPLICATION_JSON)
+                    .entity(GROUP_NOT_EXIST_JSON).build();
+        } else if(IGroupBean.NO_RIGHTS_ERROR_CODE.equals(result)) {
+            return Response.status(Response.Status.CONFLICT).type(MediaType.APPLICATION_JSON)
+                    .entity(NO_RIGHTS_JSON).build();
+        } else if(IGroupBean.USER_DOES_NOT_EXISTS_ERROR_CODE.equals(result)) {
+            return Response.status(Response.Status.CONFLICT).type(MediaType.APPLICATION_JSON)
+                    .entity(USER_DOES_NOT_EXIST_JSON).build();
         }
 
         return Response.ok().build();
