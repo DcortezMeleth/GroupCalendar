@@ -3,6 +3,7 @@ package pl.edu.agh.groupcalendar.reservices.services;
 import com.google.gson.Gson;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.DeleteMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
@@ -55,6 +56,7 @@ public class LoginServiceTest {
 
     @Test
     public void registerAndLoginTest() throws Exception {
+        //rejestracja uzytkownika - powinna sie udac
         PostMethod register = new PostMethod(TestConstants.LOGIN_SERVICE + "register");
         register.setRequestHeader(LoginService.SERVICE_KEY, TestConstants.MOCK_SERVICE_KEY);
         register.setRequestEntity(new StringRequestEntity(USER_JSON, MediaType.APPLICATION_JSON, null));
@@ -64,19 +66,41 @@ public class LoginServiceTest {
 
         register.releaseConnection();
 
-        String credentials = new String(Base64.encodeBase64("Dcortez1:dupa1".getBytes()));
+        //rejestracja tego samego uzytkownika - powinna sienie udac
+        PostMethod register2 = new PostMethod(TestConstants.LOGIN_SERVICE + "register");
+        register2.setRequestHeader(LoginService.SERVICE_KEY, TestConstants.MOCK_SERVICE_KEY);
+        register2.setRequestEntity(new StringRequestEntity(USER_JSON, MediaType.APPLICATION_JSON, null));
+        status = httpClient.executeMethod(register2);
+
+        Assert.assertEquals(HttpResponseCodes.SC_CONFLICT, status);
+
+        register2.releaseConnection();
+
+        //logowanie - powinno sie nie udac
+        String credentials = new String(Base64.encodeBase64("Dcortez1:dupa".getBytes()));
         PostMethod login = new PostMethod(TestConstants.LOGIN_SERVICE + "login/" + credentials);
         login.setRequestHeader(LoginService.SERVICE_KEY, TestConstants.MOCK_SERVICE_KEY);
         status = httpClient.executeMethod(login);
 
-        Assert.assertEquals(HttpResponseCodes.SC_OK, status);
-
-        Properties result = gson.fromJson(login.getResponseBodyAsString(), Properties.class);
-        String sessionKey = result.getProperty(LoginService.SESSION_KEY);
-        Assert.assertNotNull(sessionKey);
+        Assert.assertEquals(HttpResponseCodes.SC_UNAUTHORIZED, status);
 
         login.releaseConnection();
 
+        //logowanie - powinno sie udac
+        credentials = new String(Base64.encodeBase64("Dcortez1:dupa1".getBytes()));
+        PostMethod login2 = new PostMethod(TestConstants.LOGIN_SERVICE + "login/" + credentials);
+        login2.setRequestHeader(LoginService.SERVICE_KEY, TestConstants.MOCK_SERVICE_KEY);
+        status = httpClient.executeMethod(login2);
+
+        Assert.assertEquals(HttpResponseCodes.SC_OK, status);
+
+        Properties result = gson.fromJson(login2.getResponseBodyAsString(), Properties.class);
+        String sessionKey = result.getProperty(LoginService.SESSION_KEY);
+        Assert.assertNotNull(sessionKey);
+
+        login2.releaseConnection();
+
+        //wylogowanie - powinno sie udac
         PostMethod logout = new PostMethod(TestConstants.LOGIN_SERVICE + "logout/Dcortez1");
         logout.setRequestHeader(LoginService.SERVICE_KEY, TestConstants.MOCK_SERVICE_KEY);
         logout.setRequestHeader(LoginService.SESSION_KEY, sessionKey);
@@ -85,6 +109,26 @@ public class LoginServiceTest {
         Assert.assertEquals(HttpResponseCodes.SC_OK, status);
 
         logout.releaseConnection();
+
+        //usuniecie uzytkownika - powinno sie udac
+        PostMethod delete = new PostMethod(TestConstants.LOGIN_SERVICE + "delete/" + credentials);
+        delete.setRequestHeader(LoginService.SERVICE_KEY, TestConstants.MOCK_SERVICE_KEY);
+        delete.setRequestHeader(LoginService.SESSION_KEY, sessionKey);
+        delete.setRequestEntity(new StringRequestEntity(USER_JSON, MediaType.APPLICATION_JSON, null));
+        status = httpClient.executeMethod(delete);
+
+        Assert.assertEquals(HttpResponseCodes.SC_OK, status);
+
+        delete.releaseConnection();
+
+        //logowanie - powinno sie nie udac
+        PostMethod login3 = new PostMethod(TestConstants.LOGIN_SERVICE + "login/" + credentials);
+        login3.setRequestHeader(LoginService.SERVICE_KEY, TestConstants.MOCK_SERVICE_KEY);
+        status = httpClient.executeMethod(login3);
+
+        Assert.assertEquals(HttpResponseCodes.SC_CONFLICT, status);
+
+        login3.releaseConnection();
     }
 
 }

@@ -13,11 +13,14 @@ import javax.ejb.Local;
 @Local
 public interface IAuthBean {
 
+    /** Error code - success. */
+    String SUCCESS = "0";
+
     /** Error code - user does not exists. */
     String NO_SUCH_USER_ERROR_CODE = "-1";
 
     /** Error code - wrong password. */
-    String WRONG_PASSWORD_ERROR_CODE = "-2";
+    String WRONG_CREDENTIALS_ERROR_CODE = "-2";
 
     /** Error code - user with such username already exists. */
     String USERNAME_EXISTS_ERROR_CODE = "-4";
@@ -30,7 +33,7 @@ public interface IAuthBean {
      *
      * @param credentials encoded credentials
      * @return session key if login succeed, {@link #NO_SUCH_USER_ERROR_CODE} when user does not exists
-     *      or {@link #WRONG_PASSWORD_ERROR_CODE} when user entered wrong password
+     *      or {@link #WRONG_CREDENTIALS_ERROR_CODE} when user entered wrong password
      */
     String login(final String credentials);
 
@@ -66,4 +69,12 @@ public interface IAuthBean {
      *      or {@link #EMAIL_EXISTS_ERROR_CODE} if user with this email already exists
      */
     String register(final User user);
+
+    /**
+     * Deletes user from system.
+     * @param user user to remove
+     * @param credentials encoded user credentials
+     * @return true if removed, false otherwise
+     */
+    String deleteUser(final User user, final String credentials);
 }

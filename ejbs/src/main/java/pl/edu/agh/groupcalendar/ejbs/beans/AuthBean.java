@@ -10,7 +10,6 @@ import org.apache.commons.codec.binary.Base64;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.Date;
 import java.util.List;
@@ -54,7 +53,7 @@ public class AuthBean implements IAuthBean {
         //jesli haslo nie istnieje lub jest niepoprawne zwracamy null
         String dbPassword = user.getUs_password();
         if (dbPassword == null || !dbPassword.equals(password)) {
-            return WRONG_PASSWORD_ERROR_CODE;
+            return WRONG_CREDENTIALS_ERROR_CODE;
         }
 
         //tworzymy nowa sesje i zapisujemy na bazie
@@ -104,7 +103,6 @@ public class AuthBean implements IAuthBean {
     public boolean validateSessionKey(final String sessionKey) {
         TypedQuery<Session> query = entityManager.createQuery(Session.GET_SESSION_BY_SESSION_KEY, Session.class)
                 .setParameter("ss_key", sessionKey);
-
         List<Session> result = query.getResultList();
 
         return result.size() == 1 && result.get(0).getSs_key().equals(sessionKey);
@@ -122,6 +120,36 @@ public class AuthBean implements IAuthBean {
         }
 
         entityManager.persist(user);
-        return "0";
+
+        LOGGER.info("User registered: " + user.getUs_username());
+        return SUCCESS;
+    }
+
+    @Override
+    public String deleteUser(final User user, final String credentials) {
+        String usernameAndPassword = new String(Base64.decodeBase64(credentials));
+        StringTokenizer tokenizer = new StringTokenizer(usernameAndPassword, ":");
+        String username = tokenizer.nextToken();
+        String password = tokenizer.nextToken();
+
+        TypedQuery<User> query = entityManager.createQuery(User.GET_USER_BY_USERNAME_OR_EMAIL, User.class)
+                .setParameter("username", user.getUs_username()).setParameter("email", user.getUs_email());
+
+        if (query.getResultList().size() == 0) {
+            LOGGER.debug("Cannot delete user! User does not exists. Username: " + user.getUs_username());
+            return NO_SUCH_USER_ERROR_CODE;
+        }
+
+        User userToRemove = query.getSingleResult();
+
+        if(!userToRemove.getUs_username().equals(username) || !userToRemove.getUs_password().equals(password)) {
+            LOGGER.debug("Cannot delete user! Wrong credentials. Username: " + user.getUs_username());
+            return WRONG_CREDENTIALS_ERROR_CODE;
+        }
+
+        entityManager.remove(userToRemove);
+
+        LOGGER.info("User removed: " + user.getUs_username());
+        return SUCCESS;
     }
 }

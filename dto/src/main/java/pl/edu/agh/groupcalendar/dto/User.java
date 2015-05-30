@@ -36,7 +36,7 @@ public class User implements Serializable {
     @ManyToMany(mappedBy = "users")
     private transient List<Group> groups;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
     private transient List<Session> sessions;
 
     private String us_username;
