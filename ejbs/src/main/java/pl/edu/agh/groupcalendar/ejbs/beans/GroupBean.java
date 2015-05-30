@@ -34,7 +34,7 @@ public class GroupBean implements IGroupBean {
 
         if(!groupQuery.getResultList().isEmpty()) {
             LOGGER.info("Cannot create group. Name already taken.");
-            return GROUP_ALREDY_EXISTS_ERROR_CODE;
+            return GROUP_ALREADY_EXISTS_ERROR_CODE;
         }
 
         TypedQuery<Session> query = entityManager.createQuery(Session.GET_SESSION_BY_SESSION_KEY, Session.class)
@@ -48,6 +48,36 @@ public class GroupBean implements IGroupBean {
         entityManager.persist(group);
 
         LOGGER.info("Group created: " + group.getGr_name());
-        return SUCCES;
+        return SUCCESS;
+    }
+
+    @Override
+    public String modify(final Group group, final String sessionKey, final boolean remove) {
+        TypedQuery<Group> groupQuery = entityManager.createQuery(Group.GET_GROUP_BY_NAME, Group.class)
+                .setParameter("name", group.getGr_name());
+
+        if(groupQuery.getResultList().isEmpty()) {
+            LOGGER.info("Cannot modify group. This group does not exists.");
+            return GROUP_DOES_NOT_EXISTS_ERROR_CODE;
+        }
+
+        TypedQuery<Session> query = entityManager.createQuery(Session.GET_SESSION_BY_SESSION_KEY, Session.class)
+                .setParameter("ss_key", sessionKey);
+        Session session = query.getSingleResult();
+
+        User user = session.getUser();
+
+        if(!user.equals(group.getGc_admin())) {
+            LOGGER.info("Cannot modify group. Need admin rights!");
+            return NO_RIGHTS_ERROR_CODE;
+        }
+
+        if(remove) {
+            entityManager.remove(group);
+        } else {
+            entityManager.merge(group);
+        }
+
+        return SUCCESS;
     }
 }

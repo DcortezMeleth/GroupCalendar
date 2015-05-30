@@ -10,9 +10,7 @@ import pl.edu.agh.groupcalendar.ejbs.interfaces.IGroupBean;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
@@ -35,9 +33,17 @@ public class GroupService {
     private static final String WRONG_JSON =
             "{\"error_no\":\"-6\", \"error_desc\":\"Received json is not valid in this method.\"}";
 
-    /** Return JSON for ERROR_CODE {@link IGroupBean#GROUP_ALREDY_EXISTS_ERROR_CODE GROUP_ALREDY_EXISTS_ERROR_CODE}. */
+    /** Return JSON for ERROR_CODE {@link IGroupBean#GROUP_ALREADY_EXISTS_ERROR_CODE GROUP_ALREADY_EXISTS_ERROR_CODE}. */
     private static final String GROUP_ALREADY_EXISTS_JSON =
             "{\"error_no\":\"-1\", \"error_desc\":\"Group with this name already exists.\"}";
+
+    /** Return JSON for ERROR_CODE {@link IGroupBean#GROUP_DOES_NOT_EXISTS_ERROR_CODE GROUP_DOES_NOT_EXISTS_ERROR_CODE}. */
+    private static final String GROUP_NOT_EXIST_JSON =
+            "{\"error_no\":\"-2\", \"error_desc\":\"Group with this name does not exists.\"}";
+
+    /** Return JSON for ERROR_CODE {@link IGroupBean#NO_RIGHTS_ERROR_CODE NO_RIGHTS_ERROR_CODE}. */
+    private static final String NO_RIGHTS_JSON =
+            "{\"error_no\":\"-3\", \"error_desc\":\"No right to modify this group.\"}";
 
     /** Object capable of serialization to and from json. */
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -51,7 +57,7 @@ public class GroupService {
      * @param groupString group JSON string
      * @return {@link Response.Status#OK OK} when group created,
      *      {@link Response.Status#CONFLICT CONFLICT} with appropriate message when creating did not succeed
-     *      {@link Response.Status#BAD_REQUEST BAD_REQUEST} when user JSON is not valid
+     *      {@link Response.Status#BAD_REQUEST BAD_REQUEST} when group JSON is not valid
      */
     @POST
     @Path("/create")
@@ -68,7 +74,7 @@ public class GroupService {
 
         String result = groupBean.create(group, httpHeaders.getHeaderString(LoginService.SESSION_KEY));
 
-        if(IGroupBean.GROUP_ALREDY_EXISTS_ERROR_CODE.equals(result)) {
+        if(IGroupBean.GROUP_ALREADY_EXISTS_ERROR_CODE.equals(result)) {
             return Response.status(Response.Status.CONFLICT).type(MediaType.APPLICATION_JSON)
                     .entity(GROUP_ALREADY_EXISTS_JSON).build();
         }
@@ -76,4 +82,39 @@ public class GroupService {
         return Response.ok().build();
     }
 
+
+    /**
+     * Creates group in a system
+     * @param groupString group JSON string
+     * @param delete optional query param, indicates if group should be removed, default is false
+     * @return {@link Response.Status#OK OK} when group created,
+     *      {@link Response.Status#CONFLICT CONFLICT} with appropriate message when editing did not succeed
+     *      {@link Response.Status#BAD_REQUEST BAD_REQUEST} when group JSON is not valid
+     */
+    @POST
+    @Path("/edit")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response edit(@Context HttpHeaders httpHeaders,
+                         @DefaultValue("false") @QueryParam("del") final boolean delete, final String groupString) {
+        Group group;
+        try {
+            group = gson.fromJson(groupString, Group.class);
+        } catch (JsonSyntaxException e) {
+            LOGGER.error("create", e);
+            return Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON_TYPE)
+                    .entity(WRONG_JSON).build();
+        }
+
+        String result = groupBean.modify(group, httpHeaders.getHeaderString(LoginService.SESSION_KEY), delete);
+
+        if(IGroupBean.GROUP_DOES_NOT_EXISTS_ERROR_CODE.equals(result)) {
+            return Response.status(Response.Status.CONFLICT).type(MediaType.APPLICATION_JSON)
+                    .entity(GROUP_NOT_EXIST_JSON).build();
+        } else if(IGroupBean.NO_RIGHTS_ERROR_CODE.equals(result)) {
+            return Response.status(Response.Status.CONFLICT).type(MediaType.APPLICATION_JSON)
+                    .entity(NO_RIGHTS_JSON).build();
+        }
+
+        return Response.ok().build();
+    }
 }

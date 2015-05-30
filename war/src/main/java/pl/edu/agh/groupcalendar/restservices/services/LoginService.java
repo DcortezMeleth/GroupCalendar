@@ -87,7 +87,8 @@ public class LoginService {
     @POST
     @Path("/login/{credentials}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response login(@Context HttpHeaders httpHeaders, @PathParam("credentials") String credentials) {
+    public Response login(@Context HttpHeaders httpHeaders,
+                          @PathParam("credentials") String credentials) {
         String sessionKey = authBean.login(credentials);
 
         if (IAuthBean.NO_SUCH_USER_ERROR_CODE.equals(sessionKey)) {
