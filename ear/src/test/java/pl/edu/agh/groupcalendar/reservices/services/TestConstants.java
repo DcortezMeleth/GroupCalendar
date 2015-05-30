@@ -17,4 +17,7 @@ public interface TestConstants {
 
     /** Path for login rest services. */
     String LOGIN_SERVICE = BASE_URL + "auth/";
+
+    /** Path for login rest services. */
+    String GROUP_SERVICE = BASE_URL + "group/";
 }

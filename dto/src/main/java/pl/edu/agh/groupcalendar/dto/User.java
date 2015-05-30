@@ -18,7 +18,8 @@ public class User implements Serializable {
     private final static long serialVersionUID = 1435232L;
 
     /** Get user for given username. */
-    public static final String GET_USER_BY_USERNAME = "SELECT u FROM gc_users u WHERE u.us_username = :username";
+    public static final String GET_USER_BY_USERNAME =
+            "SELECT u FROM gc_users u WHERE u.us_username = :username";
 
     /** Get user for given username or email. */
     public static final String GET_USER_BY_USERNAME_OR_EMAIL =

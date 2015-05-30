@@ -65,16 +65,17 @@ public interface IAuthBean {
      * Register user.
      *
      * @param user newly created user
-     * @return "0" if registered, {@link #USERNAME_EXISTS_ERROR_CODE} if username already taken
+     * @return {@link #SUCCESS} if registered, {@link #USERNAME_EXISTS_ERROR_CODE} if username already taken
      *      or {@link #EMAIL_EXISTS_ERROR_CODE} if user with this email already exists
-     */
+    */
     String register(final User user);
 
     /**
      * Deletes user from system.
      * @param user user to remove
      * @param credentials encoded user credentials
-     * @return true if removed, false otherwise
+     * @return {@link #SUCCESS} if registered, {@link #NO_SUCH_USER_ERROR_CODE} if user does not exists
+     *      or {@link #WRONG_CREDENTIALS_ERROR_CODE} if credentials doesn't match given user
      */
     String deleteUser(final User user, final String credentials);
 }

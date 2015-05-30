@@ -36,22 +36,28 @@ public class LoginService {
     public static final String SESSION_KEY = "session_key";
 
     /** Return JSON for ERROR_CODE {@link IAuthBean#NO_SUCH_USER_ERROR_CODE NO_SUCH_USER_ERROR_CODE}. */
-    private static final String NO_USER_JSON = "{\"error_no\":\"-1\", \"error_desc\":\"User does not exists.\"}";
+    private static final String NO_USER_JSON =
+            "{\"error_no\":\"-1\", \"error_desc\":\"User does not exists.\"}";
 
     /** Return JSON for ERROR_CODE {@link IAuthBean#WRONG_CREDENTIALS_ERROR_CODE WRONG_CREDENTIALS_ERROR_CODE}. */
-    private static final String WRONG_CREDENTIALS_JSON = "{\"error_no\":\"-2\", \"error_desc\":\"Wrong credentials.\"}";
+    private static final String WRONG_CREDENTIALS_JSON =
+            "{\"error_no\":\"-2\", \"error_desc\":\"Wrong credentials.\"}";
 
     /** Return JSON when user session does not exists. */
-    private static final String SESSION_NOT_EXISTS_JSON = "{\"error_no\":\"-3\", \"error_desc\":\"Session does not exists.\"}";
+    private static final String SESSION_NOT_EXISTS_JSON =
+            "{\"error_no\":\"-3\", \"error_desc\":\"Session does not exists.\"}";
 
     /** Return JSON for ERROR_CODE {@link IAuthBean#USERNAME_EXISTS_ERROR_CODE USERNAME_EXISTS_ERROR_CODE}. */
-    private static final String USERNAME_EXISTS_JSON = "{\"error_no\":\"-4\", \"error_desc\":\"Username already exists.\"}";
+    private static final String USERNAME_EXISTS_JSON =
+            "{\"error_no\":\"-4\", \"error_desc\":\"Username already exists.\"}";
 
     /** Return JSON for ERROR_CODE {@link IAuthBean#EMAIL_EXISTS_ERROR_CODE EMAIL_EXISTS_ERROR_CODE}. */
-    private static final String EMAIL_EXISTS_JSON = "{\"error_no\":\"-5\", \"error_desc\":\"Email already exists.\"}";
+    private static final String EMAIL_EXISTS_JSON =
+            "{\"error_no\":\"-5\", \"error_desc\":\"Email already exists.\"}";
 
     /** Return JSON when received invalid json. */
-    private static final String WRONG_JSON = "{\"error_no\":\"-6\", \"error_desc\":\"Received json is not valid in this method.\"}";
+    private static final String WRONG_JSON =
+            "{\"error_no\":\"-6\", \"error_desc\":\"Received json is not valid in this method.\"}";
 
     /** Object capable of serialization to and from json. */
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();

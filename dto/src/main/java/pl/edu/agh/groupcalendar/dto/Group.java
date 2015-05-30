@@ -6,13 +6,20 @@ import java.util.Date;
 import java.util.List;
 
 /**
+ * Represents group in backend system.
+ *
  * @author Bartosz
  *         Created on 2015-05-24.
  */
 @Entity(name = "gc_groups")
 public class Group implements Serializable {
 
+    /** serialVersionUID. */
     private static final long serialVersionUID = 32452535L;
+
+    /** Get group for given name. */
+    public static final String GET_GROUP_BY_NAME =
+            "SELECT g FROM gc_groups g WHERE g.gr_name = :name";
 
     @Id
     private int gr_id;

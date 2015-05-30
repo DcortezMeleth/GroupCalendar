@@ -43,7 +43,7 @@ public class AuthBean implements IAuthBean {
 
         TypedQuery<User> query = entityManager.createQuery(User.GET_USER_BY_USERNAME, User.class)
                 .setParameter("username", username);
-        User user = query.getResultList().size() != 0 ? query.getSingleResult() : null;
+        User user = !query.getResultList().isEmpty() ? query.getSingleResult() : null;
 
         //jesli nie ma uzytkownika na bazie zwracamy null
         if (user == null) {
@@ -73,7 +73,7 @@ public class AuthBean implements IAuthBean {
     public boolean logout(final String sessionKey, final String username) {
         TypedQuery<User> getUserQuery = entityManager.createQuery(User.GET_USER_BY_USERNAME, User.class)
                 .setParameter("username", username);
-        User user = getUserQuery.getResultList().size() != 0 ? getUserQuery.getSingleResult() : null;
+        User user = !getUserQuery.getResultList().isEmpty() ? getUserQuery.getSingleResult() : null;
 
         if (user == null) {
             return false;
@@ -84,7 +84,7 @@ public class AuthBean implements IAuthBean {
         TypedQuery<Session> getSessionQuery =
                 entityManager.createQuery(Session.GET_SESSION_BY_USER_ID_AND_SESSION_KEY, Session.class)
                 .setParameter("user", user).setParameter("sessionKey", sessionKey);
-        Session session = getSessionQuery.getResultList().size() != 0 ? getSessionQuery.getSingleResult() : null;
+        Session session = !getSessionQuery.getResultList().isEmpty() ? getSessionQuery.getSingleResult() : null;
 
         if (session == null) {
             return false;
@@ -113,7 +113,7 @@ public class AuthBean implements IAuthBean {
         TypedQuery<User> query = entityManager.createQuery(User.GET_USER_BY_USERNAME_OR_EMAIL, User.class)
                 .setParameter("username", user.getUs_username()).setParameter("email", user.getUs_email());
 
-        if (query.getResultList().size() != 0) {
+        if (!query.getResultList().isEmpty()) {
             LOGGER.debug("Cannot register user! Username or email already in db.");
             User user1 = query.getResultList().get(0);
             return user1.getUs_username().equals(user.getUs_username()) ? USERNAME_EXISTS_ERROR_CODE : EMAIL_EXISTS_ERROR_CODE;
@@ -135,7 +135,7 @@ public class AuthBean implements IAuthBean {
         TypedQuery<User> query = entityManager.createQuery(User.GET_USER_BY_USERNAME_OR_EMAIL, User.class)
                 .setParameter("username", user.getUs_username()).setParameter("email", user.getUs_email());
 
-        if (query.getResultList().size() == 0) {
+        if (query.getResultList().isEmpty()) {
             LOGGER.debug("Cannot delete user! User does not exists. Username: " + user.getUs_username());
             return NO_SUCH_USER_ERROR_CODE;
         }
