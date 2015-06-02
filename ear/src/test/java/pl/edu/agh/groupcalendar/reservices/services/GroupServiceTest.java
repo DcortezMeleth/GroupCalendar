@@ -37,8 +37,9 @@ public class GroupServiceTest {
 
     /** String with JSON for creating user. */
     private static final String USER_JSON_2 = "{\"us_username\":\"groupTest2\"," +
-            "\"us_name\": \"Bartosz1\",\"us_surname\": \"Sadel1\",\"us_password\": \"dupa1\"," +
+            "\"us_name\": \"b\",\"us_surname\": \"s\",\"us_password\": \"dupa1\"," +
             "\"us_salt\": \"\",\"us_email\":\"groupTest2@gmail.com\"}";
+
 
     /** Gson instance to allow easy JSON conversion. */
     private static Gson gson;
@@ -79,13 +80,14 @@ public class GroupServiceTest {
         register.releaseConnection();
 
         //rejestracja uzytkownika - powinna sie udac
-        register.setRequestHeader(LoginService.SERVICE_KEY, TestConstants.MOCK_SERVICE_KEY);
-        register.setRequestEntity(new StringRequestEntity(USER_JSON_2, MediaType.APPLICATION_JSON, null));
-        status = httpClient.executeMethod(register);
+        PostMethod register2 = new PostMethod(TestConstants.LOGIN_SERVICE + "register");
+        register2.setRequestHeader(LoginService.SERVICE_KEY, TestConstants.MOCK_SERVICE_KEY);
+        register2.setRequestEntity(new StringRequestEntity(USER_JSON_2, MediaType.APPLICATION_JSON, null));
+        status = httpClient.executeMethod(register2);
 
         Assert.assertEquals(HttpResponseCodes.SC_OK, status);
 
-        register.releaseConnection();
+        register2.releaseConnection();
 
 
         //logowanie - powinno sie udac
@@ -103,17 +105,17 @@ public class GroupServiceTest {
 
 
         //logowanie - powinno sie udac
-        login = new PostMethod(TestConstants.LOGIN_SERVICE + "login/" + credentials2);
-        login.setRequestHeader(LoginService.SERVICE_KEY, TestConstants.MOCK_SERVICE_KEY);
-        status = httpClient.executeMethod(login);
+        PostMethod login2 = new PostMethod(TestConstants.LOGIN_SERVICE + "login/" + credentials2);
+        login2.setRequestHeader(LoginService.SERVICE_KEY, TestConstants.MOCK_SERVICE_KEY);
+        status = httpClient.executeMethod(login2);
 
         Assert.assertEquals(HttpResponseCodes.SC_OK, status);
 
-        result = gson.fromJson(login.getResponseBodyAsString(), Properties.class);
+        result = gson.fromJson(login2.getResponseBodyAsString(), Properties.class);
         sessionKey2 = result.getProperty(LoginService.SESSION_KEY);
         Assert.assertNotNull(sessionKey);
 
-        login.releaseConnection();
+        login2.releaseConnection();
     }
 
     /**
@@ -134,15 +136,15 @@ public class GroupServiceTest {
 
         delete.releaseConnection();
         //usuniecie uzytkownika - powinno sie udac
-        delete = new PostMethod(TestConstants.LOGIN_SERVICE + "delete/" + credentials2);
-        delete.setRequestHeader(LoginService.SERVICE_KEY, TestConstants.MOCK_SERVICE_KEY);
-        delete.setRequestHeader(LoginService.SESSION_KEY, sessionKey2);
-        delete.setRequestEntity(new StringRequestEntity(USER_JSON, MediaType.APPLICATION_JSON, null));
-        status = httpClient.executeMethod(delete);
+        PostMethod delete2 = new PostMethod(TestConstants.LOGIN_SERVICE + "delete/" + credentials2);
+        delete2.setRequestHeader(LoginService.SERVICE_KEY, TestConstants.MOCK_SERVICE_KEY);
+        delete2.setRequestHeader(LoginService.SESSION_KEY, sessionKey2);
+        delete2.setRequestEntity(new StringRequestEntity(USER_JSON, MediaType.APPLICATION_JSON, null));
+        status = httpClient.executeMethod(delete2);
 
         Assert.assertEquals(HttpResponseCodes.SC_OK, status);
 
-        delete.releaseConnection();
+        delete2.releaseConnection();
     }
 
     @Test
@@ -169,34 +171,37 @@ public class GroupServiceTest {
         create.releaseConnection();
 
         //tworzenie grupy 2 - powinno sie udac
-        create.setRequestHeader(LoginService.SERVICE_KEY, TestConstants.MOCK_SERVICE_KEY);
-        create.setRequestHeader(LoginService.SESSION_KEY, sessionKey);
-        create.setRequestEntity(new StringRequestEntity(gson.toJson(group2), MediaType.APPLICATION_JSON, null));
-        status = httpClient.executeMethod(create);
+        PostMethod create2 = new PostMethod(TestConstants.GROUP_SERVICE + "create");
+        create2.setRequestHeader(LoginService.SERVICE_KEY, TestConstants.MOCK_SERVICE_KEY);
+        create2.setRequestHeader(LoginService.SESSION_KEY, sessionKey);
+        create2.setRequestEntity(new StringRequestEntity(gson.toJson(group2), MediaType.APPLICATION_JSON, null));
+        status = httpClient.executeMethod(create2);
 
         Assert.assertEquals(HttpResponseCodes.SC_OK, status);
 
-        create.releaseConnection();
+        create2.releaseConnection();
 
         //tworzenie grupy 3 - powinno sie udac
-        create.setRequestHeader(LoginService.SERVICE_KEY, TestConstants.MOCK_SERVICE_KEY);
-        create.setRequestHeader(LoginService.SESSION_KEY, sessionKey);
-        create.setRequestEntity(new StringRequestEntity(gson.toJson(group3), MediaType.APPLICATION_JSON, null));
-        status = httpClient.executeMethod(create);
+        PostMethod create3 = new PostMethod(TestConstants.GROUP_SERVICE + "create");
+        create3.setRequestHeader(LoginService.SERVICE_KEY, TestConstants.MOCK_SERVICE_KEY);
+        create3.setRequestHeader(LoginService.SESSION_KEY, sessionKey);
+        create3.setRequestEntity(new StringRequestEntity(gson.toJson(group3), MediaType.APPLICATION_JSON, null));
+        status = httpClient.executeMethod(create3);
 
         Assert.assertEquals(HttpResponseCodes.SC_OK, status);
 
-        create.releaseConnection();
+        create2.releaseConnection();
 
         //tworzenie grupy 3 po raz 2 - nie powinno sie udac
-        create.setRequestHeader(LoginService.SERVICE_KEY, TestConstants.MOCK_SERVICE_KEY);
-        create.setRequestHeader(LoginService.SESSION_KEY, sessionKey);
-        create.setRequestEntity(new StringRequestEntity(gson.toJson(group3), MediaType.APPLICATION_JSON, null));
-        status = httpClient.executeMethod(create);
+        PostMethod create4 = new PostMethod(TestConstants.GROUP_SERVICE + "create");
+        create4.setRequestHeader(LoginService.SERVICE_KEY, TestConstants.MOCK_SERVICE_KEY);
+        create4.setRequestHeader(LoginService.SESSION_KEY, sessionKey);
+        create4.setRequestEntity(new StringRequestEntity(gson.toJson(group3), MediaType.APPLICATION_JSON, null));
+        status = httpClient.executeMethod(create4);
 
         Assert.assertEquals(HttpResponseCodes.SC_CONFLICT, status);
 
-        create.releaseConnection();
+        create4.releaseConnection();
 
         //dolaczenie do grupy1 - user2
         PostMethod join = new PostMethod(TestConstants.GROUP_SERVICE + "join");
@@ -211,15 +216,16 @@ public class GroupServiceTest {
         join.releaseConnection();
 
         //dolaczenie do grupy2 - user2
-        join.setRequestHeader(LoginService.SERVICE_KEY, TestConstants.MOCK_SERVICE_KEY);
-        join.setRequestHeader(LoginService.SESSION_KEY, sessionKey2);
-        join.addParameter("groupname", group2.getGr_name());
-        join.addParameter("username", "groupTest2");
-        status = httpClient.executeMethod(join);
+        PostMethod join2 = new PostMethod(TestConstants.GROUP_SERVICE + "join");
+        join2.setRequestHeader(LoginService.SERVICE_KEY, TestConstants.MOCK_SERVICE_KEY);
+        join2.setRequestHeader(LoginService.SESSION_KEY, sessionKey2);
+        join2.addParameter("groupname", group2.getGr_name());
+        join2.addParameter("username", "groupTest2");
+        status = httpClient.executeMethod(join2);
 
         Assert.assertEquals(HttpResponseCodes.SC_OK, status);
 
-        join.releaseConnection();
+        join2.releaseConnection();
 
         //edycja grupy 1
         group3.setGr_desc("testt");
@@ -263,18 +269,18 @@ public class GroupServiceTest {
         leave.releaseConnection();
 
         //pobranie listy grup - powinno zwrocic 1
-        getList = new GetMethod(TestConstants.GROUP_SERVICE + "groupList");
-        getList.setRequestHeader(LoginService.SERVICE_KEY, TestConstants.MOCK_SERVICE_KEY);
-        getList.setRequestHeader(LoginService.SESSION_KEY, sessionKey2);
-        status = httpClient.executeMethod(getList);
+        GetMethod getList2 = new GetMethod(TestConstants.GROUP_SERVICE + "groupList");
+        getList2.setRequestHeader(LoginService.SERVICE_KEY, TestConstants.MOCK_SERVICE_KEY);
+        getList2.setRequestHeader(LoginService.SESSION_KEY, sessionKey2);
+        status = httpClient.executeMethod(getList2);
 
         Assert.assertEquals(HttpResponseCodes.SC_OK, status);
 
-        groups = gson.fromJson(getList.getResponseBodyAsString(), listType);
+        groups = gson.fromJson(getList2.getResponseBodyAsString(), listType);
         Assert.assertNotNull(groups);
         Assert.assertEquals(groups.size(), 1);
 
-        getList.releaseConnection();
+        getList2.releaseConnection();
 
         //dolaczenie do grupy2 - user1 - dodanie przez admina - powinno sie udac
         PostMethod addToGroup = new PostMethod(TestConstants.GROUP_SERVICE + "join");
@@ -289,18 +295,18 @@ public class GroupServiceTest {
         addToGroup.releaseConnection();
 
         //pobranie listy grup - powinno zwrocic 2
-        getList = new GetMethod(TestConstants.GROUP_SERVICE + "groupList");
-        getList.setRequestHeader(LoginService.SERVICE_KEY, TestConstants.MOCK_SERVICE_KEY);
-        getList.setRequestHeader(LoginService.SESSION_KEY, sessionKey2);
-        status = httpClient.executeMethod(getList);
+        GetMethod getList3 = new GetMethod(TestConstants.GROUP_SERVICE + "groupList");
+        getList3.setRequestHeader(LoginService.SERVICE_KEY, TestConstants.MOCK_SERVICE_KEY);
+        getList3.setRequestHeader(LoginService.SESSION_KEY, sessionKey2);
+        status = httpClient.executeMethod(getList3);
 
         Assert.assertEquals(HttpResponseCodes.SC_OK, status);
 
-        groups = gson.fromJson(getList.getResponseBodyAsString(), listType);
+        groups = gson.fromJson(getList3.getResponseBodyAsString(), listType);
         Assert.assertNotNull(groups);
         Assert.assertEquals(groups.size(), 2);
 
-        getList.releaseConnection();
+        getList3.releaseConnection();
 
         //usuniecie z grupy - powinno sie udac
         PostMethod removeFromGroup = new PostMethod(TestConstants.GROUP_SERVICE + "leave");
@@ -315,18 +321,18 @@ public class GroupServiceTest {
         removeFromGroup.releaseConnection();
 
         //pobranie listy grup - powinno zwrocic 1
-        getList = new GetMethod(TestConstants.GROUP_SERVICE + "groupList");
-        getList.setRequestHeader(LoginService.SERVICE_KEY, TestConstants.MOCK_SERVICE_KEY);
-        getList.setRequestHeader(LoginService.SESSION_KEY, sessionKey2);
-        status = httpClient.executeMethod(getList);
+        GetMethod getList4 = new GetMethod(TestConstants.GROUP_SERVICE + "groupList");
+        getList4.setRequestHeader(LoginService.SERVICE_KEY, TestConstants.MOCK_SERVICE_KEY);
+        getList4.setRequestHeader(LoginService.SESSION_KEY, sessionKey2);
+        status = httpClient.executeMethod(getList4);
 
         Assert.assertEquals(HttpResponseCodes.SC_OK, status);
 
-        groups = gson.fromJson(getList.getResponseBodyAsString(), listType);
+        groups = gson.fromJson(getList4.getResponseBodyAsString(), listType);
         Assert.assertNotNull(groups);
         Assert.assertEquals(groups.size(), 1);
 
-        getList.releaseConnection();
+        getList4.releaseConnection();
 
         //usuniecie grupy 1
         PostMethod remove = new PostMethod(TestConstants.GROUP_SERVICE + "edit");
@@ -341,40 +347,40 @@ public class GroupServiceTest {
         remove.releaseConnection();
 
         //usuniecie grupy 2
-        remove = new PostMethod(TestConstants.GROUP_SERVICE + "edit");
-        remove.setRequestHeader(LoginService.SERVICE_KEY, TestConstants.MOCK_SERVICE_KEY);
-        remove.setRequestHeader(LoginService.SESSION_KEY, sessionKey);
-        remove.addParameter("del", "true");
+        PostMethod remove2 = new PostMethod(TestConstants.GROUP_SERVICE + "edit");
+        remove2.setRequestHeader(LoginService.SERVICE_KEY, TestConstants.MOCK_SERVICE_KEY);
+        remove2.setRequestHeader(LoginService.SESSION_KEY, sessionKey);
+        remove2.addParameter("del", "true");
         edit.setRequestEntity(new StringRequestEntity(gson.toJson(group2), MediaType.APPLICATION_JSON, null));
-        status = httpClient.executeMethod(remove);
+        status = httpClient.executeMethod(remove2);
 
         Assert.assertEquals(HttpResponseCodes.SC_OK, status);
 
-        remove.releaseConnection();
+        remove2.releaseConnection();
 
         //usuniecie grupy 3 - nie powinno sie udac
-        remove = new PostMethod(TestConstants.GROUP_SERVICE + "edit");
-        remove.setRequestHeader(LoginService.SERVICE_KEY, TestConstants.MOCK_SERVICE_KEY);
-        remove.setRequestHeader(LoginService.SESSION_KEY, sessionKey2);
-        remove.addParameter("del", "true");
+        PostMethod remove3 = new PostMethod(TestConstants.GROUP_SERVICE + "edit");
+        remove3.setRequestHeader(LoginService.SERVICE_KEY, TestConstants.MOCK_SERVICE_KEY);
+        remove3.setRequestHeader(LoginService.SESSION_KEY, sessionKey2);
+        remove3.addParameter("del", "true");
         edit.setRequestEntity(new StringRequestEntity(gson.toJson(group3), MediaType.APPLICATION_JSON, null));
-        status = httpClient.executeMethod(remove);
+        status = httpClient.executeMethod(remove3);
 
         Assert.assertEquals(HttpResponseCodes.SC_CONFLICT, status);
 
-        remove.releaseConnection();
+        remove3.releaseConnection();
 
         //usuniecie grupy 3
-        remove = new PostMethod(TestConstants.GROUP_SERVICE + "edit");
-        remove.setRequestHeader(LoginService.SERVICE_KEY, TestConstants.MOCK_SERVICE_KEY);
-        remove.setRequestHeader(LoginService.SESSION_KEY, sessionKey);
-        remove.addParameter("del", "true");
+        PostMethod remove4 = new PostMethod(TestConstants.GROUP_SERVICE + "edit");
+        remove4.setRequestHeader(LoginService.SERVICE_KEY, TestConstants.MOCK_SERVICE_KEY);
+        remove4.setRequestHeader(LoginService.SESSION_KEY, sessionKey);
+        remove4.addParameter("del", "true");
         edit.setRequestEntity(new StringRequestEntity(gson.toJson(group3), MediaType.APPLICATION_JSON, null));
-        status = httpClient.executeMethod(remove);
+        status = httpClient.executeMethod(remove4);
 
         Assert.assertEquals(HttpResponseCodes.SC_OK, status);
 
-        remove.releaseConnection();
+        remove4.releaseConnection();
 
 
     }
