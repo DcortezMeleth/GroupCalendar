@@ -42,6 +42,8 @@ public class Group implements Serializable {
 
     private String gr_name;
 
+    private String gr_desc;
+
     private Date gc_cdate = new Date();
 
     private Date gc_mdate;
@@ -96,6 +98,14 @@ public class Group implements Serializable {
 
     public void setGr_name(String gr_name) {
         this.gr_name = gr_name;
+    }
+
+    public String getGr_desc() {
+        return gr_desc;
+    }
+
+    public void setGr_desc(final String gr_desc) {
+        this.gr_desc = gr_desc;
     }
 
     public User getGc_admin() {

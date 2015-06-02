@@ -63,6 +63,7 @@ project(":ear") {
         deploy project(path:":war", configuration:'archives')
         earlib project(path:":ejbs", configuration:"compile")
         testCompile project(':war')
+        testCompile project(':dto')
         testCompile group: 'junit', name: 'junit', version: '4.12'
         testCompile group: 'commons-httpclient', name: 'commons-httpclient', version: '3.1'
         testCompile group: 'org.jboss.resteasy', name: 'resteasy-jaxrs', version: '3.0.11.Final'

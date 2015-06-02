@@ -15,6 +15,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 /**
  * Bean serving group connected REST services.
@@ -66,6 +67,7 @@ public class GroupService {
     @POST
     @Path("/create")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response create(@Context HttpHeaders httpHeaders, final String groupString) {
         Group group;
         try {
@@ -97,6 +99,7 @@ public class GroupService {
     @POST
     @Path("/edit")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response edit(@Context HttpHeaders httpHeaders,
                          @DefaultValue("false") @QueryParam("del") final boolean delete, final String groupString) {
         Group group;
@@ -130,6 +133,7 @@ public class GroupService {
      */
     @POST
     @Path("/join")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response join(@Context HttpHeaders httpHeaders, @QueryParam("groupname") final String groupName,
                          @QueryParam("username") final String username) {
         String result = groupBean.join(groupName, username, httpHeaders.getHeaderString(LoginService.SESSION_KEY));
@@ -157,9 +161,10 @@ public class GroupService {
      */
     @POST
     @Path("/leave")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response leave(@Context HttpHeaders httpHeaders, @QueryParam("groupname") final String groupName,
                          @QueryParam("username") final String username) {
-        String result = groupBean.join(groupName, username, httpHeaders.getHeaderString(LoginService.SESSION_KEY));
+        String result = groupBean.leave(groupName, username, httpHeaders.getHeaderString(LoginService.SESSION_KEY));
 
         if(IGroupBean.GROUP_DOES_NOT_EXISTS_ERROR_CODE.equals(result)) {
             return Response.status(Response.Status.CONFLICT).type(MediaType.APPLICATION_JSON)
@@ -173,5 +178,19 @@ public class GroupService {
         }
 
         return Response.ok().build();
+    }
+
+    /**
+     * Returns group to whom user belongs
+     * @return {@link Response.Status#OK OK} when group created,
+     *      {@link Response.Status#CONFLICT CONFLICT} with appropriate message when adding did not succeed
+     */
+    @GET
+    @Path("/groupList")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response groupsList(@Context HttpHeaders httpHeaders) {
+        List<Group> result = groupBean.groupsList(httpHeaders.getHeaderString(LoginService.SESSION_KEY));
+
+        return Response.status(Response.Status.OK).entity(result).build();
     }
 }

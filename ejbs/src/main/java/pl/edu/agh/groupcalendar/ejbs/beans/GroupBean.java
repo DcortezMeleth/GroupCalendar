@@ -11,6 +11,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.util.List;
 
 /**
  * Bean serving group connected services.
@@ -160,5 +161,19 @@ public class GroupBean implements IGroupBean {
         LOGGER.info("User: " + username + " removed from group " + groupName);
 
         return SUCCESS;
+    }
+
+    @Override
+    public List<Group> groupsList(final String sessionKey) {
+        List<Group> result;
+        TypedQuery<Session> query = entityManager.createQuery(Session.GET_SESSION_BY_SESSION_KEY, Session.class)
+                .setParameter("ss_key", sessionKey);
+        Session session = query.getSingleResult();
+
+        User user = session.getUser();
+
+        result = user.getGroups();
+
+        return result;
     }
 }

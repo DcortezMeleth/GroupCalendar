@@ -3,6 +3,7 @@ package pl.edu.agh.groupcalendar.ejbs.interfaces;
 import pl.edu.agh.groupcalendar.dto.Group;
 
 import javax.ejb.Local;
+import java.util.List;
 
 /**
  * Group services facade.
@@ -54,7 +55,7 @@ public interface IGroupBean {
      *
      * @param groupName name of group to join
      * @param userName name od user to add
-     * @param sessionKey session key of assing user
+     * @param sessionKey session key of a singed user
      * @return {@link #SUCCESS} if registered, {@link #USER_DOES_NOT_EXISTS_ERROR_CODE} when user does not exists
      *      ,{@link #GROUP_DOES_NOT_EXISTS_ERROR_CODE} if group with this name does not exists or
      *      {@link #NO_RIGHTS_ERROR_CODE} if requested by user without correct rights
@@ -66,10 +67,19 @@ public interface IGroupBean {
      *
      * @param groupName name of group to join
      * @param userName name od user to add
-     * @param sessionKey session key of assing user
+     * @param sessionKey session key of a singed user
      * @return {@link #SUCCESS} if registered, {@link #USER_DOES_NOT_EXISTS_ERROR_CODE} when user does not exists
      *      ,{@link #GROUP_DOES_NOT_EXISTS_ERROR_CODE} if group with this name does not exists or
      *      {@link #NO_RIGHTS_ERROR_CODE} if requested by user without correct rights
      */
     String leave(final String groupName, final String userName, final String sessionKey);
+
+
+    /**
+     * Returns groups for a user
+     *
+     * @param sessionKey session key of a singed user
+     * @return list of groups to whom user belongs
+     */
+    List<Group> groupsList(final String sessionKey);
 }

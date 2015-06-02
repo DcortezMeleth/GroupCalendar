@@ -8,12 +8,11 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.jboss.resteasy.util.HttpResponseCodes;
 import org.junit.Assert;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import pl.edu.agh.groupcalendar.restservices.services.LoginService;
 
 import javax.ws.rs.core.MediaType;
-import java.lang.Exception;
 import java.util.Properties;
 
 /**
@@ -30,13 +29,13 @@ public class LoginServiceTest {
             "\"us_salt\": \"\",\"us_email\":\"bsadel691@gmail.com\"}";
 
     /** Gson instance to allow easy JSON conversion. */
-    private Gson gson;
+    private static Gson gson;
 
-    /** Http client.*/
-    private HttpClient httpClient;
+    /** Http client. */
+    private static HttpClient httpClient;
 
-    @Before
-    public void init() {
+    @BeforeClass
+    public static void init() {
         gson = new Gson();
         httpClient = new HttpClient();
     }
