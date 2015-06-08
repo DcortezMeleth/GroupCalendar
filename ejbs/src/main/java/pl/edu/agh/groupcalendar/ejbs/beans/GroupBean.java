@@ -14,7 +14,7 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 
 /**
- * Bean serving group connected services.
+ * Bean serving group related services.
  *
  * @author Bartosz
  *         Created on 2015-05-30.

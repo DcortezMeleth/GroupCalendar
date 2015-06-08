@@ -16,6 +16,10 @@ public class Event implements Serializable {
 
     private static final long serialVersionUID = 235932589L;
 
+    /** Get group for given name. */
+    public static final String GET_EVENT_BY_NAME =
+            "SELECT e FROM gc_events e WHERE e.ev_name = :name";
+
     @Id
     private int ev_id;
 

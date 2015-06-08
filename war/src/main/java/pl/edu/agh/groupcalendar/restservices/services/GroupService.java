@@ -18,7 +18,7 @@ import javax.ws.rs.core.Response;
 import java.util.List;
 
 /**
- * Bean serving group connected REST services.
+ * Bean serving group related REST services.
  *
  * @author Bartosz
  *         Created on 2015-05-30.
@@ -48,7 +48,7 @@ public class GroupService {
 
     /** Return JSON for ERROR_CODE {@link IGroupBean#NO_RIGHTS_ERROR_CODE NO_RIGHTS_ERROR_CODE}. */
     private static final String USER_DOES_NOT_EXIST_JSON =
-            "{\"error_no\":\"-4\", \"error_desc\":\"No right to modify this group.\"}";
+            "{\"error_no\":\"-4\", \"error_desc\":\"User does not exists.\"}";
 
     /** Object capable of serialization to and from json. */
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
