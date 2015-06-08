@@ -8,6 +8,7 @@ import pl.edu.agh.groupcalendar.dto.Session;
 import pl.edu.agh.groupcalendar.dto.User;
 import pl.edu.agh.groupcalendar.ejbs.interfaces.IEventBean;
 
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -20,6 +21,7 @@ import java.util.List;
  * @author Bartosz
  *         Created on 2015-06-08.
  */
+@Stateless
 public class EventBean implements IEventBean {
 
     /** Logger. */

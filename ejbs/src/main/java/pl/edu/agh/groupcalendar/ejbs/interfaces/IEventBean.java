@@ -2,6 +2,7 @@ package pl.edu.agh.groupcalendar.ejbs.interfaces;
 
 import pl.edu.agh.groupcalendar.dto.Event;
 
+import javax.ejb.Local;
 import java.util.List;
 
 /**
@@ -10,6 +11,7 @@ import java.util.List;
  * @author Bartosz
  *         Created on 2015-06-08.
  */
+@Local
 public interface IEventBean {
 
     /** Error code - succes. */

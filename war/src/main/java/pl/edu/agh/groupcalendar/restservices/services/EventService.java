@@ -6,9 +6,7 @@ import com.google.gson.JsonSyntaxException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import pl.edu.agh.groupcalendar.dto.Event;
-import pl.edu.agh.groupcalendar.dto.Group;
 import pl.edu.agh.groupcalendar.ejbs.interfaces.IEventBean;
-import pl.edu.agh.groupcalendar.ejbs.interfaces.IGroupBean;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
