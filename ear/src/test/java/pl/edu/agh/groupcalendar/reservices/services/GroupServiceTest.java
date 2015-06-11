@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
@@ -203,24 +204,28 @@ public class GroupServiceTest {
 
         create4.releaseConnection();
 
-        //dolaczenie do grupy1 - user2
+        //dodanie do grupy1 - user2
         PostMethod join = new PostMethod(TestConstants.GROUP_SERVICE + "join");
         join.setRequestHeader(LoginService.SERVICE_KEY, TestConstants.MOCK_SERVICE_KEY);
-        join.setRequestHeader(LoginService.SESSION_KEY, sessionKey2);
-        join.addParameter("groupname", group1.getGr_name());
-        join.addParameter("username", "groupTest2");
+        join.setRequestHeader(LoginService.SESSION_KEY, sessionKey);
+        join.setQueryString( new NameValuePair[] {
+                new NameValuePair("groupname", group1.getGr_name()),
+                new NameValuePair("username", "groupTest2")
+        });
         status = httpClient.executeMethod(join);
 
         Assert.assertEquals(HttpResponseCodes.SC_OK, status);
 
         join.releaseConnection();
 
-        //dolaczenie do grupy2 - user2
+        //dodanie do grupy2 - user2
         PostMethod join2 = new PostMethod(TestConstants.GROUP_SERVICE + "join");
         join2.setRequestHeader(LoginService.SERVICE_KEY, TestConstants.MOCK_SERVICE_KEY);
-        join2.setRequestHeader(LoginService.SESSION_KEY, sessionKey2);
-        join2.addParameter("groupname", group2.getGr_name());
-        join2.addParameter("username", "groupTest2");
+        join2.setRequestHeader(LoginService.SESSION_KEY, sessionKey);
+        join2.setQueryString( new NameValuePair[] {
+                new NameValuePair("groupname", group2.getGr_name()),
+                new NameValuePair("username", "groupTest2")
+        });
         status = httpClient.executeMethod(join2);
 
         Assert.assertEquals(HttpResponseCodes.SC_OK, status);
@@ -260,8 +265,10 @@ public class GroupServiceTest {
         PostMethod leave = new PostMethod(TestConstants.GROUP_SERVICE + "leave");
         leave.setRequestHeader(LoginService.SERVICE_KEY, TestConstants.MOCK_SERVICE_KEY);
         leave.setRequestHeader(LoginService.SESSION_KEY, sessionKey2);
-        leave.addParameter("groupname", group1.getGr_name());
-        leave.addParameter("username", "groupTest2");
+        leave.setQueryString( new NameValuePair[] {
+                new NameValuePair("groupname", group1.getGr_name()),
+                new NameValuePair("username", "groupTest2")
+        });
         status = httpClient.executeMethod(leave);
 
         Assert.assertEquals(HttpResponseCodes.SC_OK, status);
@@ -286,8 +293,10 @@ public class GroupServiceTest {
         PostMethod addToGroup = new PostMethod(TestConstants.GROUP_SERVICE + "join");
         addToGroup.setRequestHeader(LoginService.SERVICE_KEY, TestConstants.MOCK_SERVICE_KEY);
         addToGroup.setRequestHeader(LoginService.SESSION_KEY, sessionKey);
-        addToGroup.addParameter("groupname", group1.getGr_name());
-        addToGroup.addParameter("username", "groupTest2");
+        addToGroup.setQueryString( new NameValuePair[] {
+                new NameValuePair("groupname", group1.getGr_name()),
+                new NameValuePair("username", "groupTest2")
+        });
         status = httpClient.executeMethod(addToGroup);
 
         Assert.assertEquals(HttpResponseCodes.SC_OK, status);
@@ -312,8 +321,10 @@ public class GroupServiceTest {
         PostMethod removeFromGroup = new PostMethod(TestConstants.GROUP_SERVICE + "leave");
         removeFromGroup.setRequestHeader(LoginService.SERVICE_KEY, TestConstants.MOCK_SERVICE_KEY);
         removeFromGroup.setRequestHeader(LoginService.SESSION_KEY, sessionKey);
-        removeFromGroup.addParameter("groupname", group1.getGr_name());
-        removeFromGroup.addParameter("username", "groupTest2");
+        removeFromGroup.setQueryString( new NameValuePair[] {
+                new NameValuePair("groupname", group1.getGr_name()),
+                new NameValuePair("username", "groupTest2")
+        });
         status = httpClient.executeMethod(removeFromGroup);
 
         Assert.assertEquals(HttpResponseCodes.SC_OK, status);

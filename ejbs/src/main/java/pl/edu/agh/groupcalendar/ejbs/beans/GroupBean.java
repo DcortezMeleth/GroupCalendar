@@ -62,21 +62,24 @@ public class GroupBean implements IGroupBean {
             return GROUP_DOES_NOT_EXISTS_ERROR_CODE;
         }
 
+        Group group1 = groupQuery.getSingleResult();
+
         TypedQuery<Session> query = entityManager.createQuery(Session.GET_SESSION_BY_SESSION_KEY, Session.class)
                 .setParameter("ss_key", sessionKey);
         Session session = query.getSingleResult();
 
         User user = session.getUser();
 
-        if(!user.equals(group.getGr_admin())) {
+        if(!user.equals(group1.getGr_admin())) {
             LOGGER.info("Cannot modify group. Need admin rights!");
             return NO_RIGHTS_ERROR_CODE;
         }
 
         if(remove) {
-            entityManager.remove(group);
+            entityManager.remove(group1);
         } else {
-            entityManager.merge(group);
+            group1.setGr_name(group.getGr_name());
+            group1.setGr_desc(group.getGr_desc());
         }
 
         return SUCCESS;
