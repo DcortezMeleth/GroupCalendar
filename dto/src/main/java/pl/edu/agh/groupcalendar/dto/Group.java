@@ -44,9 +44,9 @@ public class Group implements Serializable {
 
     private String gr_desc;
 
-    private Date gc_cdate = new Date();
+    private Date gr_cdate = new Date();
 
-    private Date gc_mdate;
+    private Date gr_mdate;
 
     public Group() {
         super();
@@ -116,19 +116,19 @@ public class Group implements Serializable {
         this.gr_admin = gc_admin;
     }
 
-    public Date getGc_cdate() {
-        return gc_cdate;
+    public Date getGr_cdate() {
+        return gr_cdate;
     }
 
-    public void setGc_cdate(Date gc_cdate) {
-        this.gc_cdate = gc_cdate;
+    public void setGr_cdate(Date gc_cdate) {
+        this.gr_cdate = gc_cdate;
     }
 
-    public Date getGc_mdate() {
-        return gc_mdate;
+    public Date getGr_mdate() {
+        return gr_mdate;
     }
 
-    public void setGc_mdate(Date gc_mdate) {
-        this.gc_mdate = gc_mdate;
+    public void setGr_mdate(Date gc_mdate) {
+        this.gr_mdate = gc_mdate;
     }
 }
