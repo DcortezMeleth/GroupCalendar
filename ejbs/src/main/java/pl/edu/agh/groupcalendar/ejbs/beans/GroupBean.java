@@ -44,7 +44,7 @@ public class GroupBean implements IGroupBean {
 
         User user = session.getUser();
 
-        group.setGc_admin(user);
+        group.setGr_admin(user);
 
         entityManager.persist(group);
 
@@ -68,7 +68,7 @@ public class GroupBean implements IGroupBean {
 
         User user = session.getUser();
 
-        if(!user.equals(group.getGc_admin())) {
+        if(!user.equals(group.getGr_admin())) {
             LOGGER.info("Cannot modify group. Need admin rights!");
             return NO_RIGHTS_ERROR_CODE;
         }
@@ -100,7 +100,7 @@ public class GroupBean implements IGroupBean {
 
         User user = session.getUser();
 
-        if(!user.equals(group.getGc_admin())) {
+        if(!user.equals(group.getGr_admin())) {
             LOGGER.info("Cannot add user to group. Need admin rights!");
             return NO_RIGHTS_ERROR_CODE;
         }
@@ -151,7 +151,7 @@ public class GroupBean implements IGroupBean {
         User userToRemove = getUserQuery.getSingleResult();
 
         //if not admin and not requested user - no rights!
-        if(!user.equals(group.getGc_admin()) && !user.getUs_username().equals(username)) {
+        if(!user.equals(group.getGr_admin()) && !user.getUs_username().equals(username)) {
             LOGGER.info("Cannot add user to group. No sufficient rights!");
             return NO_RIGHTS_ERROR_CODE;
         }

@@ -139,7 +139,7 @@ public class GroupServiceTest {
         PostMethod delete2 = new PostMethod(TestConstants.LOGIN_SERVICE + "delete/" + credentials2);
         delete2.setRequestHeader(LoginService.SERVICE_KEY, TestConstants.MOCK_SERVICE_KEY);
         delete2.setRequestHeader(LoginService.SESSION_KEY, sessionKey2);
-        delete2.setRequestEntity(new StringRequestEntity(USER_JSON, MediaType.APPLICATION_JSON, null));
+        delete2.setRequestEntity(new StringRequestEntity(USER_JSON_2, MediaType.APPLICATION_JSON, null));
         status = httpClient.executeMethod(delete2);
 
         Assert.assertEquals(HttpResponseCodes.SC_OK, status);

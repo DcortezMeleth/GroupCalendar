@@ -29,13 +29,18 @@ public class User implements Serializable {
     @Id
     private int us_id;
 
-    @OneToMany(mappedBy = "gc_admin", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+    @OneToMany(mappedBy = "gr_admin", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private transient List<Group> administeredGroups = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "gc_us_gr",
+            joinColumns = {@JoinColumn(name = "ug_us_id", referencedColumnName = "us_id")},
+            inverseJoinColumns = {@JoinColumn(name = "ug_gr_id", referencedColumnName = "gr_id")}
+    )
     private transient List<Group> groups = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", orphanRemoval = true, fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+    @OneToMany(mappedBy = "user", orphanRemoval = true, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private transient List<Session> sessions = new ArrayList<>();
 
     private String us_username;

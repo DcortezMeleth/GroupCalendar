@@ -26,13 +26,13 @@ public class Group implements Serializable {
     private int gr_id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "gc_admin")
-    private User gc_admin;
+    @JoinColumn(name = "gr_admin")
+    private User gr_admin;
 
     @OneToMany(mappedBy = "group")
     private transient List<Event> events;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "gc_us_gr",
             joinColumns = {@JoinColumn(name = "ug_gr_id", referencedColumnName = "gr_id")},
@@ -108,12 +108,12 @@ public class Group implements Serializable {
         this.gr_desc = gr_desc;
     }
 
-    public User getGc_admin() {
-        return gc_admin;
+    public User getGr_admin() {
+        return gr_admin;
     }
 
-    public void setGc_admin(User gc_admin) {
-        this.gc_admin = gc_admin;
+    public void setGr_admin(User gc_admin) {
+        this.gr_admin = gc_admin;
     }
 
     public Date getGc_cdate() {

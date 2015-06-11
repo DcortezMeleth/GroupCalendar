@@ -48,7 +48,7 @@ public class EventBean implements IEventBean {
 
         User user = session.getUser();
 
-        if(!user.equals(group.getGc_admin())) {
+        if(!user.equals(group.getGr_admin())) {
             LOGGER.info("Cannot create event. No sufficient rights.");
             return NO_RIGHTS_ERROR_CODE;
         }
@@ -78,7 +78,7 @@ public class EventBean implements IEventBean {
 
         User user = session.getUser();
 
-        if(!user.equals(event.getGroup().getGc_admin())) {
+        if(!user.equals(event.getGroup().getGr_admin())) {
             LOGGER.info("Cannot modify event. Need admin rights!");
             return NO_RIGHTS_ERROR_CODE;
         }
